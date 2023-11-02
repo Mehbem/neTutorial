@@ -1,3 +1,2 @@
-import pg
 
 help(list)
