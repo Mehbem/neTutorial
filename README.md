@@ -1,2 +1,2 @@
-# neTutorial
-Game development for Ne 111
+This is hangman and was designed from scratch by Bera Yavuz and Tom Verner. It is important to mention that it is a variation of hangman. Not only is the player tasked with figuring out what the unknown word is before the man is fully hung, they are also responsible for answering questions about the word after figuring it out. Some of these questions might be true or false, or might be multiple choice.
+Although the game might come as basic at first the graphics are guaranteed to make the player truly experience the medival torture present in the game!
