@@ -1,4 +1,3 @@
-print("hello")
+import pg
 
-
-import pygame
+help(list)
