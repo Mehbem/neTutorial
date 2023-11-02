@@ -20,4 +20,4 @@ random_word = random.choice(wordbank)
 len_word = len(random_word) #checks the length of the word 
 
 
-if letter_picked in random_word:
+#if letter_picked in random_word:
