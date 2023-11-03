@@ -84,6 +84,8 @@ while run:
         pg.display.update()
     
 pg.quit()
+haha
+
 
         
 
