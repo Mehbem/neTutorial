@@ -30,7 +30,11 @@ hanger_gibbet = pg.Rect((180, 200, 300, 50))
 
 rope_gibbet = pg.Rect((450, 250, 10, 80))
 
-lines_under_letters = pg.Rect((500, 200, 60, 10))
+lines_x = 500
+lines_y = 200
+letter_width = 60
+line_spacing = 10
+lines_under_letters = [pg.Rect((lines_x + i * (letter_width + line_spacing), lines_y, letter_width, 10)) for i in range(len(random_word))]
 
 
 while run:
@@ -39,7 +43,11 @@ while run:
     pg.draw.rect(screen, (106, 59, 43), body_gibbet)
     pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
     pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
-    pg.draw.rect(screen, (255, 255, 255), lines_under_letters)
+    
+    
+    for line in lines_under_letters:
+        pg.draw.rect(screen, (255, 255, 255), line)
+
 
     pg.display.update()
     
@@ -57,6 +65,7 @@ while run:
                     for i in range(len(random_word)):
                         if random_word[i] == letter:
                             correct_guesses[i] = letter
+                            
 
     # Draw the current state of the word with underscores and guessed letters
     display_word = ' '.join(correct_guesses)
