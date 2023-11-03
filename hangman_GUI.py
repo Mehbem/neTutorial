@@ -11,7 +11,6 @@ random_word = random.choice(wordbank)
 
 pg.init()
 
-correct_guesses = ['_' for _ in random_word]
 
 screen_info = pg.display.Info() #takes the info of the users screen
 screen_width = screen_info.current_w #makes the pop-up screens width based on user's screen info
@@ -70,25 +69,13 @@ while run:
             elif event.unicode.isalpha():
                  # Check if the pressed key is a letter and if it's in the word
                 letter = event.unicode.upper()
-                if letter in random_word:
-                    for i in range(len(random_word)):
-                        if random_word[i] == letter:
-                            correct_guesses[i] = letter
+                #if letter in random_word:
+                    #for i in range(len(random_word)):
+                        #if random_word[i] == letter:
     screen.blit(background_image, (0,0))
 
-    # Draw the current state of the word with underscores and guessed letters
-    display_word = ' '.join(correct_guesses)
-    # Draw display_word on the screen as needed
 
-    # Check if the word has been guessed completely
-    if ''.join(correct_guesses) == random_word:
-    #if event.key == pg.K_a
-        #if str(pg.K_a)
-           # p
-                #pg.display.flip()
-            
-        pg.display.update()
-    
+
 pg.quit()
 
         
