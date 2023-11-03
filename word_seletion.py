@@ -1,7 +1,7 @@
 #req methods:
 
 import random
-import pygame as pg
+import pygame as pygame
 
 #keystroke identity (key.Q is assigned str value "Q")
 
