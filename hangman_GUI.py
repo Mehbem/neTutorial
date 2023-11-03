@@ -19,6 +19,9 @@ screen_height = screen_info.current_h #makes the pop-up screens height based on 
 
 screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #creates the display
 
+background_image = pg.image.load("2102.i518.009_sky_cloud_evening_illustration.jpg")
+smallbackground = pg.transform.scale(background_image, (50,50))
+
 run = True
 
 #each variable is responsible for its respective visuals coordinates and size
@@ -65,7 +68,7 @@ while run:
                     for i in range(len(random_word)):
                         if random_word[i] == letter:
                             correct_guesses[i] = letter
-                            
+    screen.blit(background_image, (0,0))
 
     # Draw the current state of the word with underscores and guessed letters
     display_word = ' '.join(correct_guesses)
