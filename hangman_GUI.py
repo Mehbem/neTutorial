@@ -37,7 +37,10 @@ lines_x = 500
 lines_y = 200
 letter_width = 60
 line_spacing = 10
-lines_under_letters = [pg.Rect((lines_x + i * (letter_width + line_spacing), lines_y, letter_width, 10)) for i in range(len(random_word))]
+
+horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
+
+lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
 
 
 while run:
