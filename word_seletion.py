@@ -1,14 +1,23 @@
+#req methods:
 
-wordbank = ["kangaroo", "ocelot", "baboon", "swordfish", "duck"] #word bank that is available in the game
+import random
+import pygame as pg
+
+#keystroke identity (key.Q is assigned str value "Q")
 
 
-import random #importng a method 
 
-random_word = random.choice(wordbank) #gets a random word from the wordbank
+#defining the word bank to select from
+
+wordbank = ["kangaroo", "ocelot", "baboon", "swordfish", "duck"]
+
+#Retrieve a random word from wordbank
+
+random_word = random.choice(wordbank)
+
+#info needed abt word: length, possible spaces & where, if a letter occurs (how many times & where), 
 
 len_word = len(random_word) #checks the length of the word 
 
-letter_picked = input("Pick a letter ") #asks the user to pick a letter and takes input 
 
-if letter_picked in random_word:
-    print 
+#if letter_picked in random_word:
