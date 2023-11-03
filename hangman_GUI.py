@@ -20,7 +20,10 @@ screen_height = screen_info.current_h #makes the pop-up screens height based on 
 screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #creates the display
 
 background_image = pg.image.load("2102.i518.009_sky_cloud_evening_illustration.jpg")
-smallbackground = pg.transform.scale(background_image, (50,50))
+
+
+# Scale the background image to fit the screen
+background_image = pg.transform.scale(background_image, (screen_width, screen_height))
 
 run = True
 
