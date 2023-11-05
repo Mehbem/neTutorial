@@ -4,16 +4,18 @@
 import pygame as pg
 pg.init()
     
+screen_info = pg.display.Info() #takes the info of the users screen
+screen_width = screen_info.current_w #makes the pop-up screens width based on user's screen info
+screen_height = screen_info.current_h #makes the pop-up screens height based on user's screen info     
+    
 #Adding in font for menus text
 
-font_size = 72
+font_size = screen_width//25
 adelia = pg.font.Font('ADELIA.otf', font_size)
 text_colour = (255, 255, 255) #white, can change later
 
 
-screen_info = pg.display.Info() #takes the info of the users screen
-screen_width = screen_info.current_w #makes the pop-up screens width based on user's screen info
-screen_height = screen_info.current_h #makes the pop-up screens height based on user's screen info
+
 
 screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #creates the display
 
