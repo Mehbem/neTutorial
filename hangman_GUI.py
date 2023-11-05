@@ -65,7 +65,7 @@ while run:
             run = False
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_ESCAPE:
-                fullscreen = not fullscreen
+                run = False
             elif event.unicode.isalpha():
                  # Check if the pressed key is a letter and if it's in the word
                 letter = event.unicode.upper()
