@@ -51,9 +51,9 @@ while run:
             play_text = adelia.render(play_text, True, text_colour)
             settings_text = adelia.render(settings_text, True, text_colour)
 
-            screen.blit(main_menu_text, ((screen_width - main_menu_text.get_width()) // 2, 300))
-            screen.blit(play_text, ((screen_width - play_text.get_width()) // 2, 500))
-            screen.blit(settings_text, ((screen_width - settings_text.get_width()) // 2, 700))
+            screen.blit(main_menu_text, ((screen_width - main_menu_text.get_width()) // 2, screen_height - 600))
+            screen.blit(play_text, ((screen_width - play_text.get_width()) // 2, screen_height - 400))
+            screen.blit(settings_text, ((screen_width - settings_text.get_width()) // 2, screen_height - 200))
             pg.display.update()
 
 
