@@ -21,38 +21,88 @@ background_image = pg.image.load("2102.i518.009_sky_cloud_evening_illustration.j
 # Scale the background image to fit the screen
 background_image = pg.transform.scale(background_image, (screen_width, screen_height))
 
-#Menus unique variables
+#Menus unique functions
 
 def show_text_centred(text, x_pos, y_pos):
-    text_rendered = adelia.render(text, True, text_colour)
-    text_width = text_rendered.get_width()
-    text_height = text_rendered.get_height()
-    screen.blit(text_rendered, (screen_width // x_pos - text_width // 2, screen_height // y_pos - text_height // 2))
+    text_width = text.get_width()
+    text_height = text.get_height()
+    x = screen_width // x_pos - text_width // 2
+    y = screen_height // y_pos - text_height // 2
+    screen.blit(text, (x, y))
+    return x, y
 
 def show_text_left(text, x_pos, y_pos):
-     text_rendered = adelia.render(text, True, text_colour)
-     text_height = text_rendered.get_height()
-     screen.blit(text_rendered, ((screen_width // x_pos), screen_height // y_pos - text_height // 2))
+     text_height = text.get_height()
+     screen.blit(text, ((screen_width // x_pos), screen_height // y_pos - text_height // 2))
 
-main_menu = True
-play_game = False
-settings_menu = False
+state = 'main_menu' #see if strings are the best way to do this
 
-#Options on main menu page
-main_menu_text = "Bera and Tom's Epic Hangman!"
+#want to make a function that takes current state as input and desplays the corresponding screen
+def state_check():
+    global state, run
 
-play_text = "Play"
+    #Options on main menu page
+    main_menu_text = "Bera and Tom's Epic Hangman!"
+    main_menu_text = adelia.render(main_menu_text, True, text_colour)
+    
+    play_text = "Play"
+    play_text = adelia.render(play_text, True, text_colour)
+    
+    settings_text = "Settings"
+    settings_text = adelia.render(settings_text, True, text_colour)
+    
+    quit_text = "Quit Game"
+    quit_text = adelia.render(quit_text, True, text_colour)
 
-settings_text = "Settings"
+    #Options on settings menu page
+    master_vol_text = "Master Volume: "
+    master_vol_text = adelia.render(master_vol_text, True, text_colour)
 
-quit_text = "Quit Game"
+    music_vol_text = "Music Volume: "
+    music_vol_text = adelia.render(music_vol_text, True, text_colour)
 
-#Options on settings menu page
-master_vol_text = "Master Volume: "
+    effects_vol_text = "Effects Volume: "
+    effects_vol_text = adelia.render(effects_vol_text, True, text_colour)
 
-music_vol_text = "Music Volume: "
+    if state == 'main_menu':
+        #Displaying main menu text
+        show_text_centred(main_menu_text, 2, 7)
+        show_text_centred(play_text, 2, 7 / 3)
+        settings_x, settings_y = show_text_centred(settings_text, 2, 7 / 4)
+        quit_x, quit_y = show_text_centred(quit_text, 2, 7 / 5)
 
-effects_vol_text = "Effects Volume: "
+        settings_button = settings_text.get_rect()
+        settings_button.topleft = (settings_x, settings_y)
+
+        quit_button = quit_text.get_rect()
+        quit_button.topleft = (quit_x, quit_y)
+
+        for event in pg.event.get():
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    mouse_x, mouse_y = pg.mouse.get_pos()
+                    if settings_button.collidepoint(mouse_x, mouse_y):
+                        state = 'settings_menu'
+                    if quit_button.collidepoint(mouse_x, mouse_y):
+                        run = False
+
+    if state == 'settings_menu':
+        #Displaying settings menu text
+        show_text_left(master_vol_text, 20, 6 / 2)
+
+
+
+        show_text_left(music_vol_text, 20, 6 / 3)
+
+
+
+        show_text_left(effects_vol_text, 20, 6 / 4)
+
+
+        
+
+    if state == 'play_game':
+        return state
 
 
 run = True
@@ -68,18 +118,7 @@ while run:
 
     screen.blit(background_image, (0,0))
 
-    if main_menu:
-        #Displaying main menu text
-        show_text_centred(main_menu_text, 2, 7)
-        show_text_centred(play_text, 2, 7 / 3)
-        show_text_centred(settings_text, 2, 7 / 4)
-        show_text_centred(quit_text, 2, 7 / 5)
-
-    if settings_menu:
-        #Displaying settings menu text
-        show_text_left(master_vol_text, 20, 6 / 2)
-        show_text_left(music_vol_text, 20, 6 / 3)
-        show_text_left(effects_vol_text, 20, 6 / 4)
+    state_check()
 
     pg.display.update()
 
