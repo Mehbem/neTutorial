@@ -67,7 +67,7 @@ def state_check():
     if state == 'main_menu':
         #Displaying main menu text
         show_text_centred(main_menu_text, 2, 7)
-        play_x, play_y = (play_text, 2, 7 / 3)
+        play_x, play_y = show_text_centred(play_text, 2, 7 / 3)
         settings_x, settings_y = show_text_centred(settings_text, 2, 7 / 4)
         quit_x, quit_y = show_text_centred(quit_text, 2, 7 / 5)
 
