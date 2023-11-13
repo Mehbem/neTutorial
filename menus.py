@@ -67,9 +67,12 @@ def state_check():
     if state == 'main_menu':
         #Displaying main menu text
         show_text_centred(main_menu_text, 2, 7)
-        show_text_centred(play_text, 2, 7 / 3)
+        play_x, play_y = (play_text, 2, 7 / 3)
         settings_x, settings_y = show_text_centred(settings_text, 2, 7 / 4)
         quit_x, quit_y = show_text_centred(quit_text, 2, 7 / 5)
+
+        play_button = play_text.get_rect()
+        play_button.topleft = (play_x, play_y)
 
         settings_button = settings_text.get_rect()
         settings_button.topleft = (settings_x, settings_y)
@@ -81,6 +84,8 @@ def state_check():
             if event.type == pg.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     mouse_x, mouse_y = pg.mouse.get_pos()
+                    if play_button.collidepoint(mouse_x, mouse_y):
+                        state = 'play_game'
                     if settings_button.collidepoint(mouse_x, mouse_y):
                         state = 'settings_menu'
                     if quit_button.collidepoint(mouse_x, mouse_y):
