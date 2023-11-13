@@ -11,9 +11,26 @@ def letter_typed():
     letter_image_resized = pg.transform.scale(letter_image,(screen_width//20,screen_height//9))
     letter_image_resized.set_colorkey((0, 0, 0))
     screen.blit(letter_image_resized, (position_x, position_y))
+    
+def draw_body_part(incorrect_guesses):
+    body_parts_positions = {
+        0: (100, 100),   # Head
+        1: (200, 100),   # Torso
+        2: (300, 100),   # Left arm
+        3: (400, 100),   # Right arm
+        4: (500, 100),   # Left leg
+        5: (600, 100)    # Right leg
+    }
+
+    if incorrect_guesses < len(body_parts_positions):
+        x, y = body_parts_positions[incorrect_guesses]
+        body_parts = pg.image.load("part_" + str(incorrect_guesses) + ".png")
+        screen.blit(body_parts, (x, y))
+    
 #defining the word bank to select from
 wordbank = ["kangaroo", "ocelot", "baboon", "swordfish", "duck"]
-wordbank = ['abc']
+
+guessed_letters = []
 
 #Retrieve a random word from wordbank
 
@@ -67,11 +84,12 @@ pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
 
 for line in lines_under_letters:
     pg.draw.rect(screen, (255, 255, 255), line)
-    
-while run:    
-    
+
+incorrect_guesses = 0
+
+while run:
     pg.display.update()
-#these if statements are responsible for making it full-screen and than checking if the user clicks ESCAPE allowing them to leave that screen
+
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
@@ -80,18 +98,17 @@ while run:
                 run = False
             elif event.unicode.isalpha():
                 letter = str(event.unicode)
-                if letter in random_word:
+                if letter in random_word and letter not in guessed_letters:
                     letter_typed()
                 else:
-                    #draw the body etc with the body parts 
+                    draw_body_part(incorrect_guesses)
+                    incorrect_guesses += 1  # Increment the incorrect guess count
+
+                guessed_letters.append(letter)  # Add the letter to the guessed_letters list
 
     pg.display.update()
               
-                            
-                            
-
-
-
+                        
 pg.quit()
 
 
