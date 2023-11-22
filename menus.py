@@ -40,7 +40,6 @@ state = 'main_menu' #see if strings are the best way to do this
 #want to make a function that takes current state as input and desplays the corresponding screen
 def state_check():
     global state, run
-
     #Options on main menu page
     main_menu_text = "Bera and Tom's Epic Hangman!"
     main_menu_text = adelia.render(main_menu_text, True, text_colour)
