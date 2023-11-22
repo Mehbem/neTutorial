@@ -12,7 +12,7 @@ screen_height = screen_info.current_h #makes the pop-up screens height based on 
 screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #creates the display
 
 #defined starting values for certain functions and uses these as the basis of the incrementation points
-correct_letter = 0 #change this to number of letters 
+number_of_correct_letters = 0 #change this to number of letters 
 incorrect_guesses = 0 
 starting_place = 0
 
@@ -169,10 +169,10 @@ while run:
                 #makes sure that a letter only appears in a space if it's correct and the person hasn't already made 6 incorrect guesses
                 if letter in random_word and letter not in guessed_letters and incorrect_guesses < 6:  
                     letter_typed()
-                    correct_letter += len(linear_search(random_word, letter))
+                    number_of_correct_letters += len(linear_search(random_word, letter))
                 else:
                     if letter not in guessed_letters:
-                        incorrect_guesses += 1  # causes a new body part to be formed everytime
+                        incorrect_guesses += 1  #causes a new body part to be formed everytime
                         draw_body_part(incorrect_guesses) 
                         if incorrect_guesses < 6:
                             draw_wrong_letter(starting_place)
@@ -181,8 +181,8 @@ while run:
                         #once the player makes 6 wrong guesses this function gets called which opens the lose screen
                             you_lose_screen()
                 guessed_letters.append(letter)  # Add the letter to the guessed_letters list
-    #this checks if the player won and if they did it calls the win screen function which opens the win screen
-    if correct_letter == len(random_word):
+    #this checks if the player won and if they did it calls the win screen function 
+    if number_of_correct_letters == len(random_word):
         you_win_screen()
     
 
