@@ -3,7 +3,16 @@ import os
 import random
 
 pg.init()
+pg.mixer.init()
+pg.mixer.music.load("glorious_morning.mp3")
 
+#responsible for all the sound effects of the game
+correct_guess_sound = pg.mixer.Sound("CorrectGuess.mp3")
+correct_guess_sound.set_volume(1.0)
+wrong_guess_sound = pg.mixer.Sound("WrongGuess.mp3")
+wrong_guess_sound.set_volume(1.0)
+pg.mixer.music.play(-1)
+pg.mixer.music.set_volume(0.3)
 
 #info regarding the pop-up screen the player plays through
 screen_info = pg.display.Info() #takes the info of the users screen
@@ -17,12 +26,44 @@ incorrect_guesses = 0
 starting_place = 0
 
 #the word bank of the game that a random word gets picked from
-wordbank = ["swordfish"]
+wordbank = ["Brian"]
 #A list of guessed letters
 guessed_letters = []
 #picks a random word from the wordbank
-random_word = random.choice(wordbank)
+random_word = random.choice(wordbank).lower()
 
+#resets all relevant variables back to their original forms in order to allow the player to play again
+def reset_game():
+    global number_of_correct_letters, incorrect_guesses, starting_place, guessed_letters, random_word
+
+    number_of_correct_letters = 0
+    incorrect_guesses = 0
+    starting_place = 0
+    guessed_letters = []
+    random_word = random.choice(wordbank).lower()
+
+#this function draws a replay button and checks to see if the player is pressing it     
+def draw_replay_button():
+    text_colour = (255, 255, 255)
+    font_size = screen_width//20
+    adelia = pg.font.Font('ADELIA.otf', font_size)
+    
+    replay_text = "Play Again"
+    replay_text = adelia.render(replay_text, True, text_colour)
+    
+    x_replay_button = screen_width // 2 - 100
+    y_replay_button = screen_height // 2 + 100
+    replay_button = replay_text.get_rect()
+    replay_button.topleft = (x_replay_button, y_replay_button)
+    screen.blit(replay_text, (x_replay_button, y_replay_button))
+    
+    for event in pg.event.get():
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1: 
+                mouse_x, mouse_y = pg.mouse.get_pos()
+                if replay_button.collidepoint(mouse_x, mouse_y):
+                    reset_game()
+                    
 
 #searches for everytime a letter appears in a word and creates a list of their positions
 def linear_search(arr, target):
@@ -121,15 +162,21 @@ run = True
 
 #creating the lose background image and scaling the background image
 
-#grass terrarion below the gibbet
+#defines the grass terrain below the gibbet and draws it
 grass_terrain = pg.image.load("pngimg.com - grass_PNG401.png")
 grass_resized = pg.transform.scale(grass_terrain,(screen_width, 200))
+screen.blit(grass_resized, (0,screen_height-200))
 
-#each variable is responsible for its respective visuals coordinates and size
-bottom_gibbet = pg.Rect((60, screen_height-50, 300, 50)) #mention it is making it proportional whenever the term screen_height and screen_width
+#each variable is responsible for its respective visuals coordinates and size as well as drawing it
+bottom_gibbet = pg.Rect((60, screen_height-50, 300, 50)) 
+pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
 body_gibbet = pg.Rect((180, screen_height-700, 50, 650))
+pg.draw.rect(screen, (106, 59, 43), body_gibbet)
 hanger_gibbet = pg.Rect((180, screen_height-700, 300, 50))
+pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
 rope_gibbet = pg.Rect((450, screen_height-650, 10, 80))
+pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
+
 
 
 #the white lines that are under each letter
@@ -139,15 +186,6 @@ letter_width = 60
 line_spacing = 10
 horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
 lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
-
-
-
-#responsible for actually displaying the gibbet and the grass while the loop is running
-screen.blit(grass_resized, (0,screen_height-200))
-pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
-pg.draw.rect(screen, (106, 59, 43), body_gibbet)
-pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
-pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
 
 
 for line in lines_under_letters:
@@ -165,30 +203,36 @@ while run:
                 #checks if the user is pressing down on a letter key
             elif event.unicode.isalpha():
                 #converts whats pressed into a string letter equivalence
-                letter = str(event.unicode)
+                letter = str(event.unicode).lower()
                 #makes sure that a letter only appears in a space if it's correct and the person hasn't already made 6 incorrect guesses
                 if letter in random_word and letter not in guessed_letters and incorrect_guesses < 6:  
                     letter_typed()
                     number_of_correct_letters += len(linear_search(random_word, letter))
+                    correct_guess_sound.play()
                 else:
                     if letter not in guessed_letters:
                         incorrect_guesses += 1  #causes a new body part to be formed everytime
-                        draw_body_part(incorrect_guesses) 
+                        draw_body_part(incorrect_guesses)
+                        wrong_guess_sound.play() 
                         if incorrect_guesses < 6:
                             draw_wrong_letter(starting_place)
                             starting_place += 1 #this increment is used in calculating the spacing between each wrong letter generated in the bottom 
                         else:
                         #once the player makes 6 wrong guesses this function gets called which opens the lose screen
+                            draw_replay_button()
                             you_lose_screen()
                 guessed_letters.append(letter)  # Add the letter to the guessed_letters list
     #this checks if the player won and if they did it calls the win screen function 
     if number_of_correct_letters == len(random_word):
         you_win_screen()
+        draw_replay_button()
     
 
     pg.display.update()
               
-
+pg.mixer.music.stop()
 pg.quit()
+
+
 
 
