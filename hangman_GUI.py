@@ -26,7 +26,7 @@ incorrect_guesses = 0
 starting_place = 0
 
 #the word bank of the game that a random word gets picked from
-wordbank = ["Brian"]
+wordbank = ["Nil"]
 #A list of guessed letters
 guessed_letters = []
 #picks a random word from the wordbank
@@ -135,6 +135,11 @@ def you_lose_screen():
     
     screen.blit(lose_screen_text, (screen_width // 2 - 600,screen_height// 2 - 100))
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 50)),screen_height// 2 + 50) )
+    
+    pg.mixer.music.stop()
+    pg.mixer.music.load("Losing_Music.mp3")
+    pg.mixer.music.play(-1)
+    pg.mixer.music.set_volume(1)
 
 def you_win_screen():
     font_size = screen_width//30
@@ -152,6 +157,12 @@ def you_win_screen():
     
     screen.blit(win_screen_text, (screen_width // 2 - 675,screen_height// 2 - 100))
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) )
+    
+    pg.mixer.music.stop()
+    pg.mixer.music.load("Winning_Music.mp3")
+    pg.mixer.music.play(-1)
+    pg.mixer.music.set_volume(1)
+
    
     
 # creating the background image and scaling the background image to fit any given screen
@@ -219,18 +230,22 @@ while run:
                             starting_place += 1 #this increment is used in calculating the spacing between each wrong letter generated in the bottom 
                         else:
                         #once the player makes 6 wrong guesses this function gets called which opens the lose screen
-                            draw_replay_button()
                             you_lose_screen()
+                            
                 guessed_letters.append(letter)  # Add the letter to the guessed_letters list
     #this checks if the player won and if they did it calls the win screen function 
     if number_of_correct_letters == len(random_word):
         you_win_screen()
-        draw_replay_button()
+        pg.mixer.music.stop()
+        pg.mixer.music.load("Winning_Music.mp3")
+        pg.mixer.music.play(-1)
+        pg.mixer.music.set_volume(1)
+        
     
 
     pg.display.update()
               
-pg.mixer.music.stop()
+
 pg.quit()
 
 
