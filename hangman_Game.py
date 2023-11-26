@@ -6,6 +6,8 @@ import sys
 pg.init()
 pg.mixer.init()
 
+
+
 background_music = pg.mixer.Channel(0)
 win_music = pg.mixer.Channel(1)
 lose_music = pg.mixer.Channel(2)
@@ -34,8 +36,16 @@ number_of_correct_letters = 0 #change this to number of letters
 incorrect_guesses = 0 
 starting_place = 0
 
+
 #the word bank of the game that a random word gets picked from
-wordbank = ['Zeynep', "Elif", "Mustafa", "Mehtap", "Bera"]
+#wordbank = ['Zeynep', "Elif", "Mustafa", "Mehtap", "Bera"]
+wordbank = []
+file = open('Animals.txt', 'r')
+Lines = file.readlines()
+for line in Lines:
+    if len(line.split(" ")) ==1:
+        wordbank.append(line.rstrip())
+        
 #A list of guessed letters
 guessed_letters = []
 #picks a random word from the wordbank
