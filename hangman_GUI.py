@@ -35,7 +35,7 @@ incorrect_guesses = 0
 starting_place = 0
 
 #the word bank of the game that a random word gets picked from
-wordbank = ["Nil", "Ben", "Michael"]
+wordbank = ['Bera']
 #A list of guessed letters
 guessed_letters = []
 #picks a random word from the wordbank
@@ -62,7 +62,7 @@ def reset_game():
     pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
 
     #the white lines that are under each letter
-    lines_x = screen_width-800
+    lines_x = screen_width//2 - len(random_word)*15
     lines_y = screen_height-700
     letter_width = 60
     line_spacing = 10
@@ -139,7 +139,7 @@ def letter_typed():
     
     for character in location_letter:
         
-        x_position = (screen_width - 810 ) + (character * 70) 
+        x_position = screen_width//2 - len(random_word)*16 + (character * 70) 
         y_position = lines_y - 100
         
         letter_image = pg.image.load(os.path.join("letters", letter_file_name)).convert()
@@ -147,6 +147,8 @@ def letter_typed():
         letter_image_resized.set_colorkey((0, 0, 0))
         
         screen.blit(letter_image_resized, (x_position, y_position))
+        
+        print(character)
 
 def draw_body_part(incorrect_guesses):
     
@@ -190,7 +192,7 @@ def you_lose_screen():
 
     
     
-    font_size = screen_width//20
+    font_size = screen_width//20 - len(random_word)*10
     adelia = pg.font.Font('ADELIA.otf', font_size)
     text_colour = (69, 69, 69)
     
@@ -259,7 +261,7 @@ pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
 
 
 #the white lines that are under each letter
-lines_x = screen_width-800
+lines_x = screen_width//2 - len(random_word)*15
 lines_y = screen_height-700
 letter_width = 60
 line_spacing = 10
