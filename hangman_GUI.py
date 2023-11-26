@@ -1,18 +1,27 @@
 import pygame as pg
 import os
 import random
+import sys
 
 pg.init()
 pg.mixer.init()
-pg.mixer.music.load("glorious_morning.mp3")
+
+background_music = pg.mixer.Channel(0)
+win_music = pg.mixer.Channel(1)
+lose_music = pg.mixer.Channel(2)
+background_music.play(pg.mixer.Sound("glorious_morning.mp3"), loops = -1, fade_ms=5000)
+win_music.play(pg.mixer.Sound("Winning_Music.mp3"), loops = -1, fade_ms=5000)
+lose_music.play(pg.mixer.Sound("Losing_Music.mp3"), loops = -1, fade_ms=5000)
+
+win_music.pause()
+lose_music.pause()
+
 
 #responsible for all the sound effects of the game
 correct_guess_sound = pg.mixer.Sound("CorrectGuess.mp3")
 correct_guess_sound.set_volume(1.0)
 wrong_guess_sound = pg.mixer.Sound("WrongGuess.mp3")
 wrong_guess_sound.set_volume(1.0)
-pg.mixer.music.play(-1)
-pg.mixer.music.set_volume(0.3)
 
 #info regarding the pop-up screen the player plays through
 screen_info = pg.display.Info() #takes the info of the users screen
@@ -26,7 +35,7 @@ incorrect_guesses = 0
 starting_place = 0
 
 #the word bank of the game that a random word gets picked from
-wordbank = ["Nil"]
+wordbank = ["Nil", "Ben", "Michael"]
 #A list of guessed letters
 guessed_letters = []
 #picks a random word from the wordbank
@@ -63,7 +72,32 @@ def draw_replay_button():
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if replay_button.collidepoint(mouse_x, mouse_y):
                     reset_game()
-                    
+
+def draw_quit_button():
+    text_colour = (255, 255, 255)
+    font_size = screen_width//20
+    adelia = pg.font.Font('ADELIA.otf', font_size)
+    
+    quit_text = "Quit Game"
+    quit_text = adelia.render(quit_text, True, text_colour)
+    
+    x_replay_button = screen_width // 2 - 250
+    y_replay_button = screen_height // 2 + 300
+    quit_button = quit_text.get_rect()
+    quit_button.topleft = (x_replay_button, y_replay_button)
+    screen.blit(quit_text, (x_replay_button, y_replay_button))
+    
+    for event in pg.event.get():
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1: 
+                mouse_x, mouse_y = pg.mouse.get_pos()
+                if quit_button.collidepoint(mouse_x, mouse_y):
+                     pg.display.update()
+                     pg.quit()
+        if event.type == pg.KEYDOWN:
+            #if the person presses the escape key the game closes
+            if event.key == pg.K_ESCAPE:
+                sys.exit(0)
 
 #searches for everytime a letter appears in a word and creates a list of their positions
 def linear_search(arr, target):
@@ -119,7 +153,20 @@ def draw_wrong_letter(starting_place):
     letter_image_resized.set_colorkey((0, 0, 0))
     screen.blit(letter_image_resized, (wrong_x_position, wrong_y_position))
 
+def play_music(filename):
+    pg.mixer.music.stop()
+    pg.mixer.music.load(filename)
+    pg.mixer.music.play(-1)
+    pg.mixer.music.set_volume(0.5)
+
 def you_lose_screen():
+    background_music.pause()
+    lose_music.unpause()
+    wrong_guess_sound.set_volume(0)
+    correct_guess_sound.set_volume(0)
+
+    
+    
     font_size = screen_width//20
     adelia = pg.font.Font('ADELIA.otf', font_size)
     text_colour = (69, 69, 69)
@@ -136,12 +183,20 @@ def you_lose_screen():
     screen.blit(lose_screen_text, (screen_width // 2 - 600,screen_height// 2 - 100))
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 50)),screen_height// 2 + 50) )
     
-    pg.mixer.music.stop()
-    pg.mixer.music.load("Losing_Music.mp3")
-    pg.mixer.music.play(-1)
-    pg.mixer.music.set_volume(1)
+    if event.type == pg.KEYDOWN:
+            #if the person presses the escape key the game closes
+            if event.key == pg.K_ESCAPE:
+                sys.exit(0)
+    
+    
 
 def you_win_screen():
+    background_music.pause()
+    win_music.unpause()
+    wrong_guess_sound.set_volume(0)
+    correct_guess_sound.set_volume(0)
+    
+    
     font_size = screen_width//30
     adelia = pg.font.Font('ADELIA.otf', font_size)
     text_colour = (100, 56, 154)
@@ -156,22 +211,13 @@ def you_win_screen():
     what_the_word_was = adelia.render(what_the_word_was, True, text_colour)
     
     screen.blit(win_screen_text, (screen_width // 2 - 675,screen_height// 2 - 100))
-    screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) )
-    
-    pg.mixer.music.stop()
-    pg.mixer.music.load("Winning_Music.mp3")
-    pg.mixer.music.play(-1)
-    pg.mixer.music.set_volume(1)
+    screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) ) 
 
-   
-    
 # creating the background image and scaling the background image to fit any given screen
 background_image = pg.image.load("2102.i518.009_sky_cloud_evening_illustration.jpg")
 background_image = pg.transform.scale(background_image, (screen_width, screen_height))
 screen.blit(background_image, (0,0))
-run = True
 
-#creating the lose background image and scaling the background image
 
 #defines the grass terrain below the gibbet and draws it
 grass_terrain = pg.image.load("pngimg.com - grass_PNG401.png")
@@ -189,7 +235,6 @@ rope_gibbet = pg.Rect((450, screen_height-650, 10, 80))
 pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
 
 
-
 #the white lines that are under each letter
 lines_x = screen_width-800
 lines_y = screen_height-700
@@ -204,6 +249,7 @@ for line in lines_under_letters:
 
 
 #this is what is known as the main game loop 
+run = True
 while run:
     for event in pg.event.get():
         #checks if a key is being pressed down on 
@@ -234,12 +280,13 @@ while run:
                             
                 guessed_letters.append(letter)  # Add the letter to the guessed_letters list
     #this checks if the player won and if they did it calls the win screen function 
+    if incorrect_guesses == 6:
+            you_lose_screen()
+            draw_quit_button()
+            #draw_replay_button()
     if number_of_correct_letters == len(random_word):
-        you_win_screen()
-        pg.mixer.music.stop()
-        pg.mixer.music.load("Winning_Music.mp3")
-        pg.mixer.music.play(-1)
-        pg.mixer.music.set_volume(1)
+            you_win_screen()
+            draw_quit_button()
         
     
 
@@ -247,7 +294,3 @@ while run:
               
 
 pg.quit()
-
-
-
-
