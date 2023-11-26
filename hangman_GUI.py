@@ -51,8 +51,40 @@ def reset_game():
     guessed_letters = []
     random_word = random.choice(wordbank).lower()
 
+    # Clear the screen
+    screen.blit(background_image, (0, 0))
+    screen.blit(grass_resized, (0, screen_height - 200))
+
+    # Redraw the gibbet elements
+    pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
+    pg.draw.rect(screen, (106, 59, 43), body_gibbet)
+    pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
+    pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
+
+    #the white lines that are under each letter
+    lines_x = screen_width-800
+    lines_y = screen_height-700
+    letter_width = 60
+    line_spacing = 10
+    horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
+    lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
+    
+    # Redraw the lines under letters
+    for line in lines_under_letters:
+        pg.draw.rect(screen, (255, 255, 255), line)
+
+    # Reset the music channels
+    background_music.unpause()
+    win_music.pause()
+    lose_music.pause()
+    wrong_guess_sound.set_volume(1.0)
+    correct_guess_sound.set_volume(1.0)
+
+    # Redraw the initial state of the game
+    pg.display.update()
+
 #this function draws a replay button and checks to see if the player is pressing it     
-def draw_replay_button():
+def draw_quit_replay_button():
     text_colour = (255, 255, 255)
     font_size = screen_width//20
     adelia = pg.font.Font('ADELIA.otf', font_size)
@@ -60,11 +92,20 @@ def draw_replay_button():
     replay_text = "Play Again"
     replay_text = adelia.render(replay_text, True, text_colour)
     
-    x_replay_button = screen_width // 2 - 100
-    y_replay_button = screen_height // 2 + 100
+    x_replay_button = screen_width // 2 - 250
+    y_replay_button = screen_height // 2 + 150
     replay_button = replay_text.get_rect()
     replay_button.topleft = (x_replay_button, y_replay_button)
     screen.blit(replay_text, (x_replay_button, y_replay_button))
+    
+    quit_text = "Quit Game"
+    quit_text = adelia.render(quit_text, True, text_colour)
+    
+    x_quit_button = screen_width // 2 - 250
+    y_quit_button = screen_height // 2 + 350
+    quit_button = quit_text.get_rect()
+    quit_button.topleft = (x_quit_button, y_quit_button)
+    screen.blit(quit_text, (x_quit_button, y_quit_button))
     
     for event in pg.event.get():
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -72,32 +113,14 @@ def draw_replay_button():
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if replay_button.collidepoint(mouse_x, mouse_y):
                     reset_game()
-
-def draw_quit_button():
-    text_colour = (255, 255, 255)
-    font_size = screen_width//20
-    adelia = pg.font.Font('ADELIA.otf', font_size)
-    
-    quit_text = "Quit Game"
-    quit_text = adelia.render(quit_text, True, text_colour)
-    
-    x_replay_button = screen_width // 2 - 250
-    y_replay_button = screen_height // 2 + 300
-    quit_button = quit_text.get_rect()
-    quit_button.topleft = (x_replay_button, y_replay_button)
-    screen.blit(quit_text, (x_replay_button, y_replay_button))
-    
-    for event in pg.event.get():
-        if event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == 1: 
-                mouse_x, mouse_y = pg.mouse.get_pos()
                 if quit_button.collidepoint(mouse_x, mouse_y):
-                     pg.display.update()
-                     pg.quit()
+                    pg.display.update()
+                    pg.quit()
         if event.type == pg.KEYDOWN:
             #if the person presses the escape key the game closes
             if event.key == pg.K_ESCAPE:
                 sys.exit(0)
+
 
 #searches for everytime a letter appears in a word and creates a list of their positions
 def linear_search(arr, target):
@@ -282,11 +305,10 @@ while run:
     #this checks if the player won and if they did it calls the win screen function 
     if incorrect_guesses == 6:
             you_lose_screen()
-            draw_quit_button()
-            #draw_replay_button()
+            draw_quit_replay_button()
     if number_of_correct_letters == len(random_word):
             you_win_screen()
-            draw_quit_button()
+            draw_quit_replay_button()
         
     
 
