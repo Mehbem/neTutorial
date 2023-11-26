@@ -35,7 +35,7 @@ incorrect_guesses = 0
 starting_place = 0
 
 #the word bank of the game that a random word gets picked from
-wordbank = ['Bera']
+wordbank = ['Kangro']
 #A list of guessed letters
 guessed_letters = []
 #picks a random word from the wordbank
@@ -192,7 +192,7 @@ def you_lose_screen():
 
     
     
-    font_size = screen_width//20 - len(random_word)*10
+    font_size = screen_width//20
     adelia = pg.font.Font('ADELIA.otf', font_size)
     text_colour = (69, 69, 69)
     
