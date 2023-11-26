@@ -9,18 +9,18 @@ pg.mixer.init()
 background_music = pg.mixer.Channel(0)
 win_music = pg.mixer.Channel(1)
 lose_music = pg.mixer.Channel(2)
-background_music.play(pg.mixer.Sound("glorious_morning.mp3"), loops = -1, fade_ms=5000)
-win_music.play(pg.mixer.Sound("Winning_Music.mp3"), loops = -1, fade_ms=5000)
-lose_music.play(pg.mixer.Sound("Losing_Music.mp3"), loops = -1, fade_ms=5000)
+background_music.play(pg.mixer.Sound("Music and Sound/glorious_morning.mp3"), loops = -1, fade_ms=5000)
+win_music.play(pg.mixer.Sound("Music and Sound/Winning_Music.mp3"), loops = -1, fade_ms=5000)
+lose_music.play(pg.mixer.Sound("Music and Sound/Losing_Music.mp3"), loops = -1, fade_ms=5000)
 
 win_music.pause()
 lose_music.pause()
 
 
 #responsible for all the sound effects of the game
-correct_guess_sound = pg.mixer.Sound("CorrectGuess.mp3")
+correct_guess_sound = pg.mixer.Sound("Music and Sound/CorrectGuess.mp3")
 correct_guess_sound.set_volume(1.0)
-wrong_guess_sound = pg.mixer.Sound("WrongGuess.mp3")
+wrong_guess_sound = pg.mixer.Sound("Music and Sound/WrongGuess.mp3")
 wrong_guess_sound.set_volume(1.0)
 
 #info regarding the pop-up screen the player plays through
@@ -35,7 +35,7 @@ incorrect_guesses = 0
 starting_place = 0
 
 #the word bank of the game that a random word gets picked from
-wordbank = ['Kangro']
+wordbank = ['Zeynep', "Elif", "Mustafa", "Mehtap", "Bera"]
 #A list of guessed letters
 guessed_letters = []
 #picks a random word from the wordbank
@@ -163,7 +163,7 @@ def draw_body_part(incorrect_guesses):
     
     if incorrect_guesses < len(body_parts_positions):
         x, y = body_parts_positions[incorrect_guesses]
-        body_parts = pg.image.load("part_" + str(incorrect_guesses) + ".png")
+        body_parts = pg.image.load("Body_parts/part_" + str(incorrect_guesses) + ".png")
         # Display the resized image on the screen
         screen.blit(body_parts, (x, y))
 
@@ -196,7 +196,7 @@ def you_lose_screen():
     adelia = pg.font.Font('ADELIA.otf', font_size)
     text_colour = (69, 69, 69)
     
-    background_lose_screen = pg.image.load("Losescreen.jpg")
+    background_lose_screen = pg.image.load("game visuals/Losescreen.jpg")
     background_lose_screen = pg.transform.scale(background_lose_screen, (screen_width, screen_height))
     screen.blit(background_lose_screen, (0,0))
     
@@ -226,7 +226,7 @@ def you_win_screen():
     adelia = pg.font.Font('ADELIA.otf', font_size)
     text_colour = (100, 56, 154)
     
-    background_win_screen = pg.image.load("YouWin.jpg")
+    background_win_screen = pg.image.load("game visuals/YouWin.jpg")
     background_win_screen = pg.transform.scale(background_win_screen, (screen_width, screen_height))
     screen.blit(background_win_screen, (0,0))
     
@@ -239,13 +239,13 @@ def you_win_screen():
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) ) 
 
 # creating the background image and scaling the background image to fit any given screen
-background_image = pg.image.load("2102.i518.009_sky_cloud_evening_illustration.jpg")
+background_image = pg.image.load("game visuals/2102.i518.009_sky_cloud_evening_illustration.jpg")
 background_image = pg.transform.scale(background_image, (screen_width, screen_height))
 screen.blit(background_image, (0,0))
 
 
 #defines the grass terrain below the gibbet and draws it
-grass_terrain = pg.image.load("pngimg.com - grass_PNG401.png")
+grass_terrain = pg.image.load("game visuals/pngimg.com - grass_PNG401.png")
 grass_resized = pg.transform.scale(grass_terrain,(screen_width, 200))
 screen.blit(grass_resized, (0,screen_height-200))
 
