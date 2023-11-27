@@ -11,6 +11,8 @@ pg.mixer.init()
 background_music = pg.mixer.Channel(0)
 win_music = pg.mixer.Channel(1)
 lose_music = pg.mixer.Channel(2)
+
+background_music.set_volume(0.5)
 background_music.play(pg.mixer.Sound("Music and Sound/glorious_morning.mp3"), loops = -1, fade_ms=5000)
 win_music.play(pg.mixer.Sound("Music and Sound/Winning_Music.mp3"), loops = -1, fade_ms=5000)
 lose_music.play(pg.mixer.Sound("Music and Sound/Losing_Music.mp3"), loops = -1, fade_ms=5000)
@@ -38,13 +40,12 @@ starting_place = 0
 
 
 #the word bank of the game that a random word gets picked from
-#wordbank = ['Zeynep', "Elif", "Mustafa", "Mehtap", "Bera"]
 wordbank = []
 file = open('Animals.txt', 'r')
-Lines = file.readlines()
+Lines = file.readlines() #reads through the lines of Animals.txt 
 for line in Lines:
-    if len(line.split(" ")) ==1:
-        wordbank.append(line.rstrip())
+    if len(line.split(" ")) ==1: #removes any animals name ifs its not one word 
+        wordbank.append(line.rstrip()) #adds that word to the wordbank
         
 #A list of guessed letters
 guessed_letters = []
@@ -53,29 +54,35 @@ random_word = random.choice(wordbank).lower()
 
 #resets all relevant variables back to their original forms in order to allow the player to play again
 def reset_game():
-    global number_of_correct_letters, incorrect_guesses, starting_place, guessed_letters, random_word
-
+    #allows for variavles outside the function to be used in the function
+    global number_of_correct_letters, incorrect_guesses, starting_place, guessed_letters, random_word, playing_state
+    
+    #setting back all the variables to their original values
+    playing_state = True
     number_of_correct_letters = 0
     incorrect_guesses = 0
     starting_place = 0
     guessed_letters = []
+    
+    #rechooses a randomword
     random_word = random.choice(wordbank).lower()
 
-    # Clear the screen
+    #Redraws the background image and grass
     screen.blit(background_image, (0, 0))
     screen.blit(grass_resized, (0, screen_height - 200))
 
-    # Redraw the gibbet elements
+    # Redraws the gibbet elements
     pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
     pg.draw.rect(screen, (106, 59, 43), body_gibbet)
     pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
     pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
 
-    #the white lines that are under each letter
-    lines_x = screen_width//2 - len(random_word)*15
-    lines_y = screen_height-700
-    letter_width = 60
+    #redraws the the white lines that are under each letter
+    lines_x = screen_width//2 - len(random_word)*15 #where the lines as a group start on the x position
+    lines_y = screen_height-700 #where the lines as a group start on the y position 
+    letter_width = 60 
     line_spacing = 10
+    #Both lines were found online and edited
     horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
     lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
     
@@ -129,7 +136,7 @@ def draw_quit_replay_button():
         if event.type == pg.KEYDOWN:
             #if the person presses the escape key the game closes
             if event.key == pg.K_ESCAPE:
-                sys.exit(0)
+                pg.quit()
 
 
 #searches for everytime a letter appears in a word and creates a list of their positions
@@ -195,6 +202,7 @@ def play_music(filename):
     pg.mixer.music.set_volume(0.5)
 
 def you_lose_screen():
+    
     background_music.pause()
     lose_music.unpause()
     wrong_guess_sound.set_volume(0)
@@ -226,6 +234,7 @@ def you_lose_screen():
     
 
 def you_win_screen():
+    
     background_music.pause()
     win_music.unpause()
     wrong_guess_sound.set_volume(0)
@@ -283,7 +292,8 @@ for line in lines_under_letters:
     pg.draw.rect(screen, (255, 255, 255), line)
 
 
-#this is what is known as the main game loop 
+#this is the main game loop 
+playing_state = True
 run = True
 while run:
     for event in pg.event.get():
@@ -293,7 +303,7 @@ while run:
             if event.key == pg.K_ESCAPE:
                 run = False
                 #checks if the user is pressing down on a letter key
-            elif event.unicode.isalpha():
+            elif event.unicode.isalpha() and playing_state:
                 #converts whats pressed into a string letter equivalence
                 letter = str(event.unicode).lower()
                 #makes sure that a letter only appears in a space if it's correct and the person hasn't already made 6 incorrect guesses
@@ -316,12 +326,13 @@ while run:
                 guessed_letters.append(letter)  # Add the letter to the guessed_letters list
     #this checks if the player won and if they did it calls the win screen function 
     if incorrect_guesses == 6:
+            playing_state = False
             you_lose_screen()
             draw_quit_replay_button()
-    if number_of_correct_letters == len(random_word):
+    elif number_of_correct_letters == len(random_word):
+            playing_state = False
             you_win_screen()
             draw_quit_replay_button()
-        
     
 
     pg.display.update()
