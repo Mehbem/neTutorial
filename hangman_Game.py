@@ -223,7 +223,7 @@ def you_lose_screen():
     what_the_word_was = str(random_word)
     what_the_word_was = adelia.render(what_the_word_was, True, text_colour)
     
-    screen.blit(lose_screen_text, (screen_width // 2 - 600,screen_height// 2 - 100))
+    screen.blit(lose_screen_text, (screen_width // 2 - screen_width*0.4,screen_height// 2 - 100))
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 50)),screen_height// 2 + 50) )
     
     if event.type == pg.KEYDOWN:
@@ -254,7 +254,7 @@ def you_win_screen():
     what_the_word_was = str(random_word)
     what_the_word_was = adelia.render(what_the_word_was, True, text_colour)
     
-    screen.blit(win_screen_text, (screen_width // 2 - 675,screen_height// 2 - 100))
+    screen.blit(win_screen_text, (screen_width // 2 - 6*screen_width,screen_height// 2 - 100))
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) ) 
 
 # creating the background image and scaling the background image to fit any given screen
