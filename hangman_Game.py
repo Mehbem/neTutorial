@@ -170,12 +170,12 @@ def letter_typed():
 def draw_body_part(incorrect_guesses):
     
     body_parts_positions = {
-        1: (screen_width-1060, screen_height-575),   # Head
-        2: (screen_width-990, screen_height-465),   # Torso
-        3: (screen_width-1140, screen_height-440),   # Left arm
-        4: (screen_width-990, screen_height-440),   # Right arm
-        5: (screen_width-990, screen_height-280),   # Left leg
-        6: (screen_width-1064, screen_height-280)    # Right leg
+        1: (380, screen_height-575),   # Head
+        2: (450, screen_height-465),   # Torso
+        3: (446, screen_height-440),   # Left arm
+        4: (320, screen_height-440),   # Right arm
+        5: (454, screen_height-280),   # Left leg
+        6: (380, screen_height-280)    # Right leg
     }
     
     if incorrect_guesses < len(body_parts_positions):
@@ -292,8 +292,11 @@ for line in lines_under_letters:
     pg.draw.rect(screen, (255, 255, 255), line)
 
 
-#this is the main game loop 
+#prevents user from inputing non-roman letters
+characters_allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+#used in the winscreen and lose screen to prevent the user from making anymore key inputs
 playing_state = True
+#when true allows game to run, thus setting it to false helps to quick close the game
 run = True
 while run:
     for event in pg.event.get():
@@ -302,10 +305,11 @@ while run:
             #if the person presses the escape key the game closes
             if event.key == pg.K_ESCAPE:
                 run = False
-                #checks if the user is pressing down on a letter key
-            elif event.unicode.isalpha() and playing_state:
-                #converts whats pressed into a string letter equivalence
+                #checks if the user is pressing down on a letter key and if that letter is in the set of allowed characters
+            elif event.unicode in characters_allowed and playing_state:
+                #converts whats pressed into a string letter equivalence and lowercases it 
                 letter = str(event.unicode).lower()
+            
                 #makes sure that a letter only appears in a space if it's correct and the person hasn't already made 6 incorrect guesses
                 if letter in random_word and letter not in guessed_letters and incorrect_guesses < 6:  
                     letter_typed()
