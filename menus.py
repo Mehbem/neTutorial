@@ -1,5 +1,3 @@
-#This is to test the menu as a script with basic run loop, code contained is the same as is written below
-
 import pygame as pg
 pg.init()
 
@@ -9,17 +7,12 @@ screen_height = screen_info.current_h #makes the pop-up screens height based on 
     
 #Adding in font for menus text
 
-font_size = screen_width//25
+font_size = screen_width // 25
 adelia = pg.font.Font('ADELIA.otf', font_size)
 text_colour = (255, 255, 255) #white, can change later
 
 
 screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #creates the display
-
-background_image = pg.image.load("2102.i518.009_sky_cloud_evening_illustration.jpg")
-
-# Scale the background image to fit the screen
-background_image = pg.transform.scale(background_image, (screen_width, screen_height))
 
 #Menus unique functions
 
@@ -31,15 +24,25 @@ def show_text_centred(text, x_pos, y_pos):
     screen.blit(text, (x, y))
     return x, y
 
-def show_text_left(text, x_pos, y_pos):
-     text_height = text.get_height()
-     screen.blit(text, ((screen_width // x_pos), screen_height // y_pos - text_height // 2))
+def settings_text_and_slider(text, x_pos, y_pos):
+    text_height = text.get_height()
+    text_width = text.get_width()
+    x = screen_width // x_pos
+    slider_width = screen_width // 3
 
-state = 'main_menu' #see if strings are the best way to do this
+    # Display the text
+    screen.blit(text, (x, screen_height // y_pos - text_height // 2))
+
+    # Draw the slider track
+    track = pg.Rect(screen_width // 2, screen_height // y_pos - text_height // 2 + screen_height // 36, slider_width, screen_height // 36)
+    pg.draw.rect(screen, (255, 255, 255), track)
+    return
+
+
 
 #want to make a function that takes current state as input and desplays the corresponding screen
-def state_check():
-    global state, run
+def main_menu(state):
+
     #Options on main menu page
     main_menu_text = "Bera and Tom's Epic Hangman!"
     main_menu_text = adelia.render(main_menu_text, True, text_colour)
@@ -49,85 +52,58 @@ def state_check():
     
     settings_text = "Settings"
     settings_text = adelia.render(settings_text, True, text_colour)
+  
     
     quit_text = "Quit Game"
     quit_text = adelia.render(quit_text, True, text_colour)
 
+    show_text_centred(main_menu_text, 2, 7)
+    play_x, play_y = show_text_centred(play_text, 2, 7 / 3)
+    settings_x, settings_y = show_text_centred(settings_text, 2, 7 / 4)
+    quit_x, quit_y = show_text_centred(quit_text, 2, 7 / 5)
+
+    play_button = play_text.get_rect()
+    play_button.topleft = (play_x, play_y)
+
+    settings_button = settings_text.get_rect()
+    settings_button.topleft = (settings_x, settings_y)
+
+    quit_button = quit_text.get_rect()
+    quit_button.topleft = (quit_x, quit_y)
+
+    for event in pg.event.get():
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                mouse_x, mouse_y = pg.mouse.get_pos()
+                if play_button.collidepoint(mouse_x, mouse_y):
+                    state = 'play_game'
+                if settings_button.collidepoint(mouse_x, mouse_y):
+                    state = 'settings_menu'
+                if quit_button.collidepoint(mouse_x, mouse_y):
+                    state = 'quit'
+    pg.display.update()
+    return state
+    
+def settings_menu():
+
     #Options on settings menu page
     master_vol_text = "Master Volume: "
     master_vol_text = adelia.render(master_vol_text, True, text_colour)
+    master_vol_dragging = False
 
     music_vol_text = "Music Volume: "
     music_vol_text = adelia.render(music_vol_text, True, text_colour)
+    music_vol_dragging = False
 
     effects_vol_text = "Effects Volume: "
     effects_vol_text = adelia.render(effects_vol_text, True, text_colour)
-
-    if state == 'main_menu':
-        #Displaying main menu text
-        show_text_centred(main_menu_text, 2, 7)
-        play_x, play_y = show_text_centred(play_text, 2, 7 / 3)
-        settings_x, settings_y = show_text_centred(settings_text, 2, 7 / 4)
-        quit_x, quit_y = show_text_centred(quit_text, 2, 7 / 5)
-
-        play_button = play_text.get_rect()
-        play_button.topleft = (play_x, play_y)
-
-        settings_button = settings_text.get_rect()
-        settings_button.topleft = (settings_x, settings_y)
-
-        quit_button = quit_text.get_rect()
-        quit_button.topleft = (quit_x, quit_y)
-
-        for event in pg.event.get():
-            if event.type == pg.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    mouse_x, mouse_y = pg.mouse.get_pos()
-                    if play_button.collidepoint(mouse_x, mouse_y):
-                        state = 'play_game'
-                    if settings_button.collidepoint(mouse_x, mouse_y):
-                        state = 'settings_menu'
-                    if quit_button.collidepoint(mouse_x, mouse_y):
-                        run = False
-
-    if state == 'settings_menu':
-        #Displaying settings menu text
-        show_text_left(master_vol_text, 20, 6 / 2)
-
-
-
-        show_text_left(music_vol_text, 20, 6 / 3)
-
-
-
-        show_text_left(effects_vol_text, 20, 6 / 4)
-
-
-        
-
-    if state == 'play_game':
-        return state
-
-
-run = True
+    effects_vol_dragging = False
+    #Displaying settings menu text
+    settings_text_and_slider(master_vol_text, 20, 6 / 2)
+    settings_text_and_slider(music_vol_text, 20, 6 / 3)
+    settings_text_and_slider(effects_vol_text, 20, 6 / 4)
     
-while run:
-#these if statements are responsible for making it full-screen and than checking if the user clicks ESCAPE allowing them to leave that screen
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-                run = False
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_ESCAPE:
-                run = False
 
-    screen.blit(background_image, (0,0))
 
-    state_check()
 
     pg.display.update()
-
-
-pg.quit()
-
-#Need 3 states: main menu (default), play (game), and settings (audio (master volume, music volume, effects volume))
-#All should be nested under 'while run:' loop 
