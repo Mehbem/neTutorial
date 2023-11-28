@@ -13,6 +13,14 @@ text_colour = (255, 255, 255) #white, can change later
 
 
 screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #creates the display
+background_image = pg.image.load("game visuals/2102.i518.009_sky_cloud_evening_illustration.jpg")
+background_image = pg.transform.scale(background_image, (screen_width, screen_height))
+
+
+
+#defines the grass terrain below the gibbet and draws it
+grass_terrain = pg.image.load("game visuals/pngimg.com - grass_PNG401.png")
+grass_resized = pg.transform.scale(grass_terrain,(screen_width, 200))
 
 #Menus unique functions
 
@@ -77,8 +85,13 @@ def main_menu(state):
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if play_button.collidepoint(mouse_x, mouse_y):
                     state = 'play_game'
+                    screen.blit(background_image, (0,0))
+                    screen.blit(grass_resized, (0,screen_height-200))
+
                 if settings_button.collidepoint(mouse_x, mouse_y):
                     state = 'settings_menu'
+                    screen.blit(background_image, (0,0))
+                    screen.blit(grass_resized, (0,screen_height-200))
                 if quit_button.collidepoint(mouse_x, mouse_y):
                     state = 'quit'
     pg.display.update()
