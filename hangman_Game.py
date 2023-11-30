@@ -164,7 +164,7 @@ def letter_typed():
     for character in location_letter:
         
         x_position = horizontal_position[character]
-        y_position = screen_height/4
+        y_position = screen_height//4.3
         letter_image = pg.image.load(os.path.join("letters", letter_file_name)).convert()
         letter_image_resized = pg.transform.scale(letter_image, (screen_width // 20, screen_height // 9))
         letter_image_resized.set_colorkey((0, 0, 0))
