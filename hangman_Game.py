@@ -101,6 +101,30 @@ def reset_game():
     # Redraw the initial state of the game
     pg.display.update()
 
+def play_game_state():
+    global bottom_gibbet, body_gibbet, hanger_gibbet, rope_gibbet, lines_y, lines_x
+       
+       #each variable is responsible for its respective visuals coordinates and size as well as drawing it
+    bottom_gibbet = pg.Rect((60, screen_height-50, 300, 50)) 
+    pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
+    body_gibbet = pg.Rect((180, screen_height-700, 50, 650))
+    pg.draw.rect(screen, (106, 59, 43), body_gibbet)
+    hanger_gibbet = pg.Rect((180, screen_height-700, 300, 50))
+    pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
+    rope_gibbet = pg.Rect((450, screen_height-650, 10, 80))
+    pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
+
+
+    #the white lines that are under each letter
+    lines_x = screen_width//2 - len(random_word)*15
+    lines_y = screen_height-700
+    letter_width = 60
+    line_spacing = 10
+    horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
+    lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
+
+    for line in lines_under_letters:
+        pg.draw.rect(screen, (255, 255, 255), line)
 #this function draws a replay button and checks to see if the player is pressing it     
 def draw_quit_replay_button():
     text_colour = (255, 255, 255)
@@ -165,8 +189,6 @@ def letter_typed():
         letter_image_resized.set_colorkey((0, 0, 0))
         
         screen.blit(letter_image_resized, (x_position, y_position))
-        
-        print(character)
 
 def draw_body_part(incorrect_guesses):
     
@@ -285,29 +307,7 @@ while run:
     if state == 'quit':
         run = False
     if state == 'play_game':
-        
-        #each variable is responsible for its respective visuals coordinates and size as well as drawing it
-        bottom_gibbet = pg.Rect((60, screen_height-50, 300, 50)) 
-        pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
-        body_gibbet = pg.Rect((180, screen_height-700, 50, 650))
-        pg.draw.rect(screen, (106, 59, 43), body_gibbet)
-        hanger_gibbet = pg.Rect((180, screen_height-700, 300, 50))
-        pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
-        rope_gibbet = pg.Rect((450, screen_height-650, 10, 80))
-        pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
-
-
-        #the white lines that are under each letter
-        lines_x = screen_width//2 - len(random_word)*15
-        lines_y = screen_height-700
-        letter_width = 60
-        line_spacing = 10
-        horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
-        lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
-
-
-        for line in lines_under_letters:
-            pg.draw.rect(screen, (255, 255, 255), line)
+        play_game_state()
         for event in pg.event.get():
             #checks if a key is being pressed down on 
             if event.type == pg.KEYDOWN:
