@@ -10,6 +10,7 @@ screen_height = screen_info.current_h #makes the pop-up screens height based on 
 
 font_size = screen_width // 25
 adelia = pg.font.Font('ADELIA.otf', font_size)
+adelia_2 = pg.font.Font('ADELIA.otf', screen_width // 15)
 text_colour = (255, 255, 255) #white, can change later
 play_text_colour = (255, 255, 255)
 settings_text_colour = (255, 255, 255)
@@ -68,7 +69,7 @@ def main_menu(state):
     quit_text = adelia.render(quit_text, True, quit_text_colour)
 
     pregame_text = "Guess the Animal!"
-    pregame_text = adelia.render(pregame_text, True, text_colour)
+    pregame_text = adelia_2.render(pregame_text, True, (247, 117, 143))
 
     show_text_centred(main_menu_text, 2, 7)
     play_x, play_y = show_text_centred(play_text, 2, 7 / 3)
@@ -106,7 +107,7 @@ def main_menu(state):
                     screen.blit(grass_resized, (0,screen_height-200))
                     show_text_centred(pregame_text, 2, 2)
                     pg.display.update()
-                    time.sleep(3)
+                    time.sleep(2)
                     screen.blit(background_image, (0,0))
                     screen.blit(grass_resized, (0,screen_height-200))
                     state = 'play_game'
