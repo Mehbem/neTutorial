@@ -124,6 +124,7 @@ def play_game_state():
         
 #this function draws a replay button and checks to see if the player is pressing it     
 def draw_quit_replay_button():
+    global run
     #defining all the variables and constraints of the text
     text_colour = (255, 255, 255)
     font_size = screen_width//20
@@ -154,12 +155,11 @@ def draw_quit_replay_button():
                 if replay_button.collidepoint(mouse_x, mouse_y):
                     reset_game()
                 if quit_button.collidepoint(mouse_x, mouse_y):
-                    pg.display.update()
-                    pg.quit()
+                    run = False
         if event.type == pg.KEYDOWN:
             #if the person presses the escape key the game closes
             if event.key == pg.K_ESCAPE:
-                pg.quit()
+                run = False
 
 
 #searches for everytime a letter appears in a word and creates a list of their positions
