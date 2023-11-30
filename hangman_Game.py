@@ -13,7 +13,7 @@ background_music = pg.mixer.Channel(0)
 win_music = pg.mixer.Channel(1)
 lose_music = pg.mixer.Channel(2)
 
-background_music.set_volume(0.5)
+background_music.set_volume(0.4)
 background_music.play(pg.mixer.Sound("Music and Sound/glorious_morning.mp3"), loops = -1, fade_ms=5000)
 win_music.play(pg.mixer.Sound("Music and Sound/Winning_Music.mp3"), loops = -1, fade_ms=5000)
 lose_music.play(pg.mixer.Sound("Music and Sound/Losing_Music.mp3"), loops = -1, fade_ms=5000)
@@ -83,7 +83,7 @@ def reset_game():
     pg.display.update()
 
 def play_game_state():
-    global bottom_gibbet, body_gibbet, hanger_gibbet, rope_gibbet, lines_y, lines_x
+    global bottom_gibbet, body_gibbet, hanger_gibbet, rope_gibbet, lines_y, lines_x, line_width, line_spacing
        
        #each variable is responsible for its respective visuals coordinates and size as well as drawing it
     bottom_gibbet = pg.Rect((60, screen_height-50, 300, 50)) 
@@ -99,10 +99,10 @@ def play_game_state():
     #the white lines that are under each letter
     lines_x = screen_width//2 - len(random_word)*15
     lines_y = screen_height-700
-    letter_width = 60
-    line_spacing = 10
-    horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
-    lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
+    line_width = screen_width//24
+    line_spacing = screen_width//144
+    horizontal_position = [lines_x + i * (line_width + line_spacing) for i in range(len(random_word))]
+    lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, line_width, 10) for i in range(len(random_word))]
 
     for line in lines_under_letters:
         pg.draw.rect(screen, (255, 255, 255), line)
@@ -159,12 +159,12 @@ def letter_typed():
     
     location_letter = linear_search(random_word, letter)
     letter_file_name = "letter_" + letter + ".png"
+    horizontal_position = [lines_x + i*line_width + (i-1)*screen_width//144 for i in range(len(random_word))]
     
     for character in location_letter:
         
-        x_position = screen_width//2 - len(random_word)*16 + (character * 70) 
-        y_position = lines_y - 100
-        
+        x_position = horizontal_position[character]
+        y_position = screen_height/4
         letter_image = pg.image.load(os.path.join("letters", letter_file_name)).convert()
         letter_image_resized = pg.transform.scale(letter_image, (screen_width // 20, screen_height // 9))
         letter_image_resized.set_colorkey((0, 0, 0))
