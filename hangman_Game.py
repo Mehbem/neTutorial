@@ -8,7 +8,6 @@ pg.init()
 pg.mixer.init()
 
 
-
 background_music = pg.mixer.Channel(0)
 win_music = pg.mixer.Channel(1)
 lose_music = pg.mixer.Channel(2)
@@ -18,6 +17,7 @@ background_music.play(pg.mixer.Sound("Music and Sound/glorious_morning.mp3"), lo
 win_music.play(pg.mixer.Sound("Music and Sound/Winning_Music.mp3"), loops = -1, fade_ms=5000)
 lose_music.play(pg.mixer.Sound("Music and Sound/Losing_Music.mp3"), loops = -1, fade_ms=5000)
 
+#since every music is palying in the beginning, this is pausing the win and lose music so that initally only background is playing
 win_music.pause()
 lose_music.pause()
 
@@ -72,6 +72,7 @@ def reset_game():
     screen.blit(background_image, (0, 0))
     screen.blit(grass_resized, (0, screen_height - 200))
 
+    #this function is recalling everything from the inital play screen inside the restart game function to blit it all 
     play_game_state()
 
     # Reset the music channels
@@ -108,6 +109,7 @@ def play_game_state():
         pg.draw.rect(screen, (255, 255, 255), line)
 #this function draws a replay button and checks to see if the player is pressing it     
 def draw_quit_replay_button():
+    global run
     text_colour = (255, 255, 255)
     font_size = screen_width//20
     adelia = pg.font.Font('ADELIA.otf', font_size)
@@ -137,8 +139,7 @@ def draw_quit_replay_button():
                 if replay_button.collidepoint(mouse_x, mouse_y):
                     reset_game()
                 if quit_button.collidepoint(mouse_x, mouse_y):
-                    pg.display.update()
-                    pg.quit()
+                    run = False
         if event.type == pg.KEYDOWN:
             #if the person presses the escape key the game closes
             if event.key == pg.K_ESCAPE:
@@ -258,6 +259,8 @@ def you_win_screen():
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) ) 
 
 
+
+
 # creating the background image and scaling the background image to fit any given screen
 background_image = pg.image.load("game visuals/2102.i518.009_sky_cloud_evening_illustration.jpg")
 background_image = pg.transform.scale(background_image, (screen_width, screen_height))
@@ -268,9 +271,6 @@ screen.blit(background_image, (0,0))
 grass_terrain = pg.image.load("game visuals/pngimg.com - grass_PNG401.png")
 grass_resized = pg.transform.scale(grass_terrain,(screen_width, 200))
 screen.blit(grass_resized, (0,screen_height-200))
-
-
-
 
 
 #defines a list of allowed characters and prevents user from inputing non-roman letters
@@ -313,10 +313,6 @@ while run:
                             if incorrect_guesses < 6:
                                 draw_wrong_letter(starting_place)
                                 starting_place += 1 #this increment is used in calculating the spacing between each wrong letter generated in the bottom 
-                            else:
-                            #once the player makes 6 wrong guesses this function gets called which opens the lose screen
-                                you_lose_screen()
-                                
                     guessed_letters.append(letter)  # Add the letter to the guessed_letters list
         #this checks if the player won and if they did it calls the win screen function 
         if incorrect_guesses == 6:
@@ -328,7 +324,6 @@ while run:
                 you_win_screen()
                 draw_quit_replay_button()
     
-
     pg.display.update()
               
 
