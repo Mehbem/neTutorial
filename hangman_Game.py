@@ -1,23 +1,27 @@
-import pygame as pg
+#all modules used in the code
+import pygame as pg 
 import os
 import random
 import sys
 import menus
 
+#initilalizing pygame (defined as pg above) and the mixer(sound)
 pg.init()
 pg.mixer.init()
 
 
-
+#assigning three different playtracks to differeny channels for ease of use to turn off and on later in code
 background_music = pg.mixer.Channel(0)
 win_music = pg.mixer.Channel(1)
 lose_music = pg.mixer.Channel(2)
 
+#starts playing all the soundtracks and sets the volume of the background music 
 background_music.set_volume(0.4)
 background_music.play(pg.mixer.Sound("Music and Sound/glorious_morning.mp3"), loops = -1, fade_ms=5000)
 win_music.play(pg.mixer.Sound("Music and Sound/Winning_Music.mp3"), loops = -1, fade_ms=5000)
 lose_music.play(pg.mixer.Sound("Music and Sound/Losing_Music.mp3"), loops = -1, fade_ms=5000)
 
+#since its currently on the menu screen, pausing the win and lose screen music for the time being 
 win_music.pause()
 lose_music.pause()
 
@@ -42,11 +46,12 @@ starting_place = 0
 
 #the word bank of the game that a random word gets picked from
 wordbank = []
+#opens a file and reads through each of the lines in the list of words
 file = open('Animals.txt', 'r')
 Lines = file.readlines() #reads through the lines of Animals.txt 
 for line in Lines:
     if len(line.split(" ")) ==1: #removes any animals name ifs its not one word 
-        wordbank.append(line.rstrip()) #adds that word to the wordbank"""
+        wordbank.append(line.rstrip()) #adds that word to the wordbank and rstrip gets rid of invisible /n at the end of each word
         
 #A list of guessed letters
 guessed_letters = []
@@ -72,20 +77,23 @@ def reset_game():
     screen.blit(background_image, (0, 0))
     screen.blit(grass_resized, (0, screen_height - 200))
 
+    #function responsible for drawing all initial elments in the game like parts of the gibbet and the lines under letters
     play_game_state()
 
-    # Reset the music channels
+    # Reset the music channels to inital form 
     background_music.unpause()
     win_music.pause()
     lose_music.pause()
 
-    # Redraw the initial state of the game
+   
     pg.display.update()
 
+    
 def play_game_state():
+    #making variables global allows these variables to get called by any function without having to redefine everytime
     global bottom_gibbet, body_gibbet, hanger_gibbet, rope_gibbet, lines_y, lines_x, line_width, line_spacing
        
-       #each variable is responsible for its respective visuals coordinates and size as well as drawing it
+    #each variable is responsible for its respective visuals coordinates and size as well as drawing it
     bottom_gibbet = pg.Rect((60, screen_height-50, 300, 50)) 
     pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
     body_gibbet = pg.Rect((180, screen_height-700, 50, 650))
@@ -97,31 +105,44 @@ def play_game_state():
 
 
     #the white lines that are under each letter
+    #terms like screen_width and screen_height used throughout the game are used for making sure everything is proportional no matter what display the user has
     lines_x = screen_width//2 - len(random_word)*15
     lines_y = screen_height//3
     line_width = screen_width//24
     line_spacing = screen_width//144
+    
+    #ensures that the lines are evenly spaced with the specified width and spacing, uses the length of the word converts it to a range of values and assigns each of that to a line
     horizontal_position = [lines_x + i * (line_width + line_spacing) for i in range(len(random_word))]
+    
+    #creates a list of rectangles, each representing a line under a letter in random_word
+    #These rectangles are positioned horizontally based on the horizontal_position list and vertically based on lines_y, with a specified width and thickness.
     lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, line_width, screen_height//90) for i in range(len(random_word))]
 
+    #for loop responsible for actually iterating through a list and drawing each of those rectangles in the lines_under_letters list
     for line in lines_under_letters:
         pg.draw.rect(screen, (255, 255, 255), line)
+        
 #this function draws a replay button and checks to see if the player is pressing it     
 def draw_quit_replay_button():
+    #defining all the variables and constraints of the text
     text_colour = (255, 255, 255)
     font_size = screen_width//20
     adelia = pg.font.Font('ADELIA.otf', font_size)
     
+    #the actual play again text that will be displayed on the screen the function is called 
     replay_text = "Play Again"
     replay_text = adelia.render(replay_text, True, text_colour)
     
+    #menus module made by Tom, it both returns the coordinates of a given text and blits it on the screen
     x_replay_button, y_replay_button = menus.show_text_centred(replay_text,2,1.3)
     replay_button = replay_text.get_rect()
     replay_button.topleft = (x_replay_button, y_replay_button)
     
+    #the actual quit game text that will be displayed on the screen the function is called 
     quit_text = "Quit Game"
     quit_text = adelia.render(quit_text, True, text_colour)
     
+    #menus module made by Tom, it both returns the coordinates of a given text and blits it on the screen
     x_quit_button, y_quit_button = menus.show_text_centred(quit_text,2,1.1)
     quit_button = quit_text.get_rect()
     quit_button.topleft = (x_quit_button, y_quit_button)
@@ -153,7 +174,10 @@ def linear_search(arr, target):
 #this function uses the linear search previously defined and generates a letter on the screen even if it's wrong 
 def letter_typed():
     
+    
     location_letter = linear_search(random_word, letter)
+    #the letter varialbe is defined later and basically takes the letter key input of the user and converts it to a string
+    #defines a variable for the png of every letter efficently 
     letter_file_name = "letter_" + letter + ".png"
     horizontal_position = [lines_x + i*line_width + (i-1)*screen_width//144 for i in range(len(random_word))]
     
@@ -314,12 +338,15 @@ while run:
                                 you_lose_screen()
                                 
                     guessed_letters.append(letter)  # Add the letter to the guessed_letters list
-        #this checks if the player won and if they did it calls the win screen function 
+        #this checks if the player lost and if they did it calls the lose screen function 
         if incorrect_guesses == 6:
+                #the playing_state variable is used in checking if the game is still running so when the play loses or wins it prevents any key input
                 playing_state = False
                 you_lose_screen()
                 draw_quit_replay_button()
-        elif number_of_correct_letters == len(random_word):
+            
+        #this checks if the player won and if they did it calls the win screen function  
+        if number_of_correct_letters == len(random_word):
                 playing_state = False
                 you_win_screen()
                 draw_quit_replay_button()
