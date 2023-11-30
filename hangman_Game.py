@@ -123,16 +123,17 @@ def play_game_state():
         pg.draw.rect(screen, (255, 255, 255), line)
         
 #this function draws a replay button and checks to see if the player is pressing it     
+replay_text_colour = (255, 255, 255)
+quit_text_colour = (255, 255, 255)
 def draw_quit_replay_button():
-    global run
+    global run, replay_text_colour, quit_text_colour
     #defining all the variables and constraints of the text
-    text_colour = (255, 255, 255)
     font_size = screen_width//20
     adelia = pg.font.Font('ADELIA.otf', font_size)
     
     #the actual play again text that will be displayed on the screen the function is called 
     replay_text = "Play Again"
-    replay_text = adelia.render(replay_text, True, text_colour)
+    replay_text = adelia.render(replay_text, True, replay_text_colour)
     
     #menus module made by Tom, it both returns the coordinates of a given text and blits it on the screen
     x_replay_button, y_replay_button = menus.show_text_centred(replay_text,2,1.3)
@@ -141,7 +142,7 @@ def draw_quit_replay_button():
     
     #the actual quit game text that will be displayed on the screen the function is called 
     quit_text = "Quit Game"
-    quit_text = adelia.render(quit_text, True, text_colour)
+    quit_text = adelia.render(quit_text, True, quit_text_colour)
     
     #menus module made by Tom, it both returns the coordinates of a given text and blits it on the screen
     x_quit_button, y_quit_button = menus.show_text_centred(quit_text,2,1.1)
@@ -149,6 +150,15 @@ def draw_quit_replay_button():
     quit_button.topleft = (x_quit_button, y_quit_button)
         
     for event in pg.event.get():
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        if replay_button.collidepoint(mouse_x, mouse_y):
+            replay_text_colour = (46, 155,87)
+        else:
+            replay_text_colour = (255, 255, 255)
+        if quit_button.collidepoint(mouse_x, mouse_y):
+            quit_text_colour = (136, 8 ,8)
+        else:
+            quit_text_colour = (255, 255, 255)
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1: 
                 mouse_x, mouse_y = pg.mouse.get_pos()
