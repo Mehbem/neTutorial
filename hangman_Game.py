@@ -61,7 +61,7 @@ random_word = random.choice(wordbank).lower()
 #resets all relevant variables back to their original forms in order to allow the player to play again
 def reset_game():
     #allows for variavles outside the function to be used in the function
-    global number_of_correct_letters, incorrect_guesses, starting_place, guessed_letters, random_word, playing_state
+    global number_of_correct_letters, incorrect_guesses, starting_place, guessed_letters, random_word, playing_state, replay_text_colour
     
     #setting back all the variables to their original values
     playing_state = True
@@ -69,7 +69,7 @@ def reset_game():
     incorrect_guesses = 0
     starting_place = 0
     guessed_letters = []
-    
+    replay_text_colour = (255, 255, 255)
     #rechooses a randomword
     random_word = random.choice(wordbank).lower()
 
@@ -164,7 +164,6 @@ def draw_quit_replay_button():
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if replay_button.collidepoint(mouse_x, mouse_y):
                     reset_game()
-                    replay_text_colour = (255, 255, 255)
                 if quit_button.collidepoint(mouse_x, mouse_y):
                     run = False
         if event.type == pg.KEYDOWN:
