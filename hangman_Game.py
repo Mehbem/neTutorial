@@ -45,7 +45,7 @@ file = open('Animals.txt', 'r')
 Lines = file.readlines() #reads through the lines of Animals.txt 
 for line in Lines:
     if len(line.split(" ")) ==1: #removes any animals name ifs its not one word 
-        wordbank.append(line.rstrip()) #adds that word to the wordbank
+        wordbank.append(line.rstrip()) #adds that word to the wordbank"""
         
 #A list of guessed letters
 guessed_letters = []
@@ -169,6 +169,7 @@ def letter_typed():
 
 def draw_body_part(incorrect_guesses):
     
+    
     body_parts_positions = {
         1: (380, screen_height-575),   # Head
         2: (450, screen_height-465),   # Torso
@@ -205,9 +206,6 @@ def you_lose_screen():
     
     background_music.pause()
     lose_music.unpause()
-    wrong_guess_sound.set_volume(0)
-    correct_guess_sound.set_volume(0)
-
     
     
     font_size = screen_width//20
@@ -237,8 +235,6 @@ def you_win_screen():
     
     background_music.pause()
     win_music.unpause()
-    wrong_guess_sound.set_volume(0)
-    correct_guess_sound.set_volume(0)
     
     
     font_size = screen_width//30
@@ -254,7 +250,7 @@ def you_win_screen():
     what_the_word_was = str(random_word)
     what_the_word_was = adelia.render(what_the_word_was, True, text_colour)
     
-    screen.blit(win_screen_text, (screen_width // 2 - 6*screen_width,screen_height// 2 - 100))
+    screen.blit(win_screen_text, (screen_width // 2 - screen_width*0.45,screen_height// 2 - 100))
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) ) 
 
 # creating the background image and scaling the background image to fit any given screen
@@ -263,7 +259,7 @@ background_image = pg.transform.scale(background_image, (screen_width, screen_he
 screen.blit(background_image, (0,0))
 
 
-#defines the grass terrain below the gibbet and draws it
+#defines the grass terrain below the gibbet, scales it, and draws it
 grass_terrain = pg.image.load("game visuals/pngimg.com - grass_PNG401.png")
 grass_resized = pg.transform.scale(grass_terrain,(screen_width, 200))
 screen.blit(grass_resized, (0,screen_height-200))
@@ -292,7 +288,7 @@ for line in lines_under_letters:
     pg.draw.rect(screen, (255, 255, 255), line)
 
 
-#prevents user from inputing non-roman letters
+#defines a list of allowed characters and prevents user from inputing non-roman letters
 characters_allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 #used in the winscreen and lose screen to prevent the user from making anymore key inputs
 playing_state = True
@@ -329,11 +325,12 @@ while run:
                             
                 guessed_letters.append(letter)  # Add the letter to the guessed_letters list
     #this checks if the player won and if they did it calls the win screen function 
+    #setting the playing_state to false prevents the player from inputing keys where they are on the win and lose screen
     if incorrect_guesses == 6:
             playing_state = False
             you_lose_screen()
             draw_quit_replay_button()
-    elif number_of_correct_letters == len(random_word):
+    if number_of_correct_letters == len(random_word):
             playing_state = False
             you_win_screen()
             draw_quit_replay_button()
