@@ -72,31 +72,12 @@ def reset_game():
     screen.blit(background_image, (0, 0))
     screen.blit(grass_resized, (0, screen_height - 200))
 
-    # Redraws the gibbet elements
-    pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
-    pg.draw.rect(screen, (106, 59, 43), body_gibbet)
-    pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
-    pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
-
-    #redraws the the white lines that are under each letter
-    lines_x = screen_width//2 - len(random_word)*15 #where the lines as a group start on the x position
-    lines_y = screen_height-700 #where the lines as a group start on the y position 
-    letter_width = 60 
-    line_spacing = 10
-    #Both lines were found online and edited
-    horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
-    lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
-    
-    # Redraw the lines under letters
-    for line in lines_under_letters:
-        pg.draw.rect(screen, (255, 255, 255), line)
+    play_game_state()
 
     # Reset the music channels
     background_music.unpause()
     win_music.pause()
     lose_music.pause()
-    wrong_guess_sound.set_volume(1.0)
-    correct_guess_sound.set_volume(1.0)
 
     # Redraw the initial state of the game
     pg.display.update()
