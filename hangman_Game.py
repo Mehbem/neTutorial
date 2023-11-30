@@ -340,3 +340,4 @@ while run:
               
 
 pg.quit()
+#usless, delete
