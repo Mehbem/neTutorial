@@ -115,21 +115,17 @@ def draw_quit_replay_button():
     replay_text = "Play Again"
     replay_text = adelia.render(replay_text, True, text_colour)
     
-    x_replay_button = screen_width // 2 - 250
-    y_replay_button = screen_height // 2 + 150
+    x_replay_button, y_replay_button = menus.show_text_centred(replay_text,2,1.3)
     replay_button = replay_text.get_rect()
     replay_button.topleft = (x_replay_button, y_replay_button)
-    screen.blit(replay_text, (x_replay_button, y_replay_button))
     
     quit_text = "Quit Game"
     quit_text = adelia.render(quit_text, True, text_colour)
     
-    x_quit_button = screen_width // 2 - 250
-    y_quit_button = screen_height // 2 + 350
+    x_quit_button, y_quit_button = menus.show_text_centred(quit_text,2,1.1)
     quit_button = quit_text.get_rect()
     quit_button.topleft = (x_quit_button, y_quit_button)
-    screen.blit(quit_text, (x_quit_button, y_quit_button))
-    
+        
     for event in pg.event.get():
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1: 
@@ -225,8 +221,8 @@ def you_lose_screen():
     what_the_word_was = str(random_word)
     what_the_word_was = adelia.render(what_the_word_was, True, text_colour)
     
-    screen.blit(lose_screen_text, (screen_width // 2 - screen_width*0.4,screen_height// 2 - 100))
-    screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 50)),screen_height// 2 + 50) )
+    menus.show_text_centred(lose_screen_text,2,2.3)
+    menus.show_text_centred(what_the_word_was,2,1.7)
     
     if event.type == pg.KEYDOWN:
             #if the person presses the escape key the game closes
