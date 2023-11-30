@@ -2,6 +2,7 @@ import pygame as pg
 import os
 import random
 import sys
+import menus
 
 pg.init()
 pg.mixer.init()
@@ -253,6 +254,7 @@ def you_win_screen():
     screen.blit(win_screen_text, (screen_width // 2 - screen_width*0.45,screen_height// 2 - 100))
     screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) ) 
 
+
 # creating the background image and scaling the background image to fit any given screen
 background_image = pg.image.load("game visuals/2102.i518.009_sky_cloud_evening_illustration.jpg")
 background_image = pg.transform.scale(background_image, (screen_width, screen_height))
@@ -264,28 +266,8 @@ grass_terrain = pg.image.load("game visuals/pngimg.com - grass_PNG401.png")
 grass_resized = pg.transform.scale(grass_terrain,(screen_width, 200))
 screen.blit(grass_resized, (0,screen_height-200))
 
-#each variable is responsible for its respective visuals coordinates and size as well as drawing it
-bottom_gibbet = pg.Rect((60, screen_height-50, 300, 50)) 
-pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
-body_gibbet = pg.Rect((180, screen_height-700, 50, 650))
-pg.draw.rect(screen, (106, 59, 43), body_gibbet)
-hanger_gibbet = pg.Rect((180, screen_height-700, 300, 50))
-pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
-rope_gibbet = pg.Rect((450, screen_height-650, 10, 80))
-pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
 
 
-#the white lines that are under each letter
-lines_x = screen_width//2 - len(random_word)*15
-lines_y = screen_height-700
-letter_width = 60
-line_spacing = 10
-horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
-lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
-
-
-for line in lines_under_letters:
-    pg.draw.rect(screen, (255, 255, 255), line)
 
 
 #defines a list of allowed characters and prevents user from inputing non-roman letters
@@ -294,46 +276,76 @@ characters_allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 playing_state = True
 #when true allows game to run, thus setting it to false helps to quick close the game
 run = True
+state = 'main_menu'
 while run:
-    for event in pg.event.get():
-        #checks if a key is being pressed down on 
-        if event.type == pg.KEYDOWN:
-            #if the person presses the escape key the game closes
-            if event.key == pg.K_ESCAPE:
-                run = False
-                #checks if the user is pressing down on a letter key and if that letter is in the set of allowed characters
-            elif event.unicode in characters_allowed and playing_state:
-                #converts whats pressed into a string letter equivalence and lowercases it 
-                letter = str(event.unicode).lower()
-            
-                #makes sure that a letter only appears in a space if it's correct and the person hasn't already made 6 incorrect guesses
-                if letter in random_word and letter not in guessed_letters and incorrect_guesses < 6:  
-                    letter_typed()
-                    number_of_correct_letters += len(linear_search(random_word, letter))
-                    correct_guess_sound.play()
-                else:
-                    if letter not in guessed_letters:
-                        incorrect_guesses += 1  #causes a new body part to be formed everytime
-                        draw_body_part(incorrect_guesses)
-                        wrong_guess_sound.play() 
-                        if incorrect_guesses < 6:
-                            draw_wrong_letter(starting_place)
-                            starting_place += 1 #this increment is used in calculating the spacing between each wrong letter generated in the bottom 
-                        else:
-                        #once the player makes 6 wrong guesses this function gets called which opens the lose screen
-                            you_lose_screen()
-                            
-                guessed_letters.append(letter)  # Add the letter to the guessed_letters list
-    #this checks if the player won and if they did it calls the win screen function 
-    #setting the playing_state to false prevents the player from inputing keys where they are on the win and lose screen
-    if incorrect_guesses == 6:
-            playing_state = False
-            you_lose_screen()
-            draw_quit_replay_button()
-    if number_of_correct_letters == len(random_word):
-            playing_state = False
-            you_win_screen()
-            draw_quit_replay_button()
+    while state == 'main_menu':
+        state = menus.main_menu(state)
+    if state == 'settings_menu':
+        menus.settings_menu()
+    if state == 'quit':
+        run = False
+    if state == 'play_game':
+        
+        #each variable is responsible for its respective visuals coordinates and size as well as drawing it
+        bottom_gibbet = pg.Rect((60, screen_height-50, 300, 50)) 
+        pg.draw.rect(screen, (106, 59, 43), bottom_gibbet)
+        body_gibbet = pg.Rect((180, screen_height-700, 50, 650))
+        pg.draw.rect(screen, (106, 59, 43), body_gibbet)
+        hanger_gibbet = pg.Rect((180, screen_height-700, 300, 50))
+        pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
+        rope_gibbet = pg.Rect((450, screen_height-650, 10, 80))
+        pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
+
+
+        #the white lines that are under each letter
+        lines_x = screen_width//2 - len(random_word)*15
+        lines_y = screen_height-700
+        letter_width = 60
+        line_spacing = 10
+        horizontal_position = [lines_x + i * (letter_width + line_spacing) for i in range(len(random_word))]
+        lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, letter_width, 10) for i in range(len(random_word))]
+
+
+        for line in lines_under_letters:
+            pg.draw.rect(screen, (255, 255, 255), line)
+        for event in pg.event.get():
+            #checks if a key is being pressed down on 
+            if event.type == pg.KEYDOWN:
+                #if the person presses the escape key the game closes
+                if event.key == pg.K_ESCAPE:
+                    run = False
+                    #checks if the user is pressing down on a letter key and if that letter is in the set of allowed characters
+                elif event.unicode in characters_allowed and playing_state:
+                    #converts whats pressed into a string letter equivalence and lowercases it 
+                    letter = str(event.unicode).lower()
+                
+                    #makes sure that a letter only appears in a space if it's correct and the person hasn't already made 6 incorrect guesses
+                    if letter in random_word and letter not in guessed_letters and incorrect_guesses < 6:  
+                        letter_typed()
+                        number_of_correct_letters += len(linear_search(random_word, letter))
+                        correct_guess_sound.play()
+                    else:
+                        if letter not in guessed_letters:
+                            incorrect_guesses += 1  #causes a new body part to be formed everytime
+                            draw_body_part(incorrect_guesses)
+                            wrong_guess_sound.play() 
+                            if incorrect_guesses < 6:
+                                draw_wrong_letter(starting_place)
+                                starting_place += 1 #this increment is used in calculating the spacing between each wrong letter generated in the bottom 
+                            else:
+                            #once the player makes 6 wrong guesses this function gets called which opens the lose screen
+                                you_lose_screen()
+                                
+                    guessed_letters.append(letter)  # Add the letter to the guessed_letters list
+        #this checks if the player won and if they did it calls the win screen function 
+        if incorrect_guesses == 6:
+                playing_state = False
+                you_lose_screen()
+                draw_quit_replay_button()
+        elif number_of_correct_letters == len(random_word):
+                playing_state = False
+                you_win_screen()
+                draw_quit_replay_button()
     
 
     pg.display.update()
