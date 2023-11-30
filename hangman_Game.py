@@ -164,6 +164,7 @@ def draw_quit_replay_button():
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if replay_button.collidepoint(mouse_x, mouse_y):
                     reset_game()
+                    replay_text_colour = (255, 255, 255)
                 if quit_button.collidepoint(mouse_x, mouse_y):
                     run = False
         if event.type == pg.KEYDOWN:
