@@ -1,4 +1,5 @@
 import pygame as pg
+import time
 pg.init()
 
 screen_info = pg.display.Info() #takes the info of the users screen
@@ -62,10 +63,12 @@ def main_menu(state):
     
     settings_text = "Settings"
     settings_text = adelia.render(settings_text, True, settings_text_colour)
-  
     
     quit_text = "Quit Game"
     quit_text = adelia.render(quit_text, True, quit_text_colour)
+
+    pregame_text = "Guess the Animal!"
+    pregame_text = adelia.render(pregame_text, True, text_colour)
 
     show_text_centred(main_menu_text, 2, 7)
     play_x, play_y = show_text_centred(play_text, 2, 7 / 3)
@@ -99,10 +102,14 @@ def main_menu(state):
             if event.button == 1:
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if play_button.collidepoint(mouse_x, mouse_y):
-                    state = 'play_game'
                     screen.blit(background_image, (0,0))
                     screen.blit(grass_resized, (0,screen_height-200))
-
+                    show_text_centred(pregame_text, 2, 2)
+                    pg.display.update()
+                    time.sleep(3)
+                    screen.blit(background_image, (0,0))
+                    screen.blit(grass_resized, (0,screen_height-200))
+                    state = 'play_game'
                 if settings_button.collidepoint(mouse_x, mouse_y):
                     state = 'settings_menu'
                     screen.blit(background_image, (0,0))
