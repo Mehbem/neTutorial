@@ -107,26 +107,37 @@ def play_game_state():
     for line in lines_under_letters:
         pg.draw.rect(screen, (255, 255, 255), line)
 #this function draws a replay button and checks to see if the player is pressing it     
+replay_text_colour = (255, 255, 255)
+quit_text_colour = (255, 255, 255)
 def draw_quit_replay_button():
-    text_colour = (255, 255, 255)
+    global replay_text_colour, quit_text_colour
     font_size = screen_width//20
     adelia = pg.font.Font('ADELIA.otf', font_size)
     
     replay_text = "Play Again"
-    replay_text = adelia.render(replay_text, True, text_colour)
+    replay_text = adelia.render(replay_text, True, replay_text_colour)
     
     x_replay_button, y_replay_button = menus.show_text_centred(replay_text,2,1.3)
     replay_button = replay_text.get_rect()
     replay_button.topleft = (x_replay_button, y_replay_button)
     
     quit_text = "Quit Game"
-    quit_text = adelia.render(quit_text, True, text_colour)
+    quit_text = adelia.render(quit_text, True, quit_text_colour)
     
     x_quit_button, y_quit_button = menus.show_text_centred(quit_text,2,1.1)
     quit_button = quit_text.get_rect()
     quit_button.topleft = (x_quit_button, y_quit_button)
         
     for event in pg.event.get():
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        if replay_button.collidepoint(mouse_x, mouse_y):
+            replay_text_colour = (46, 155,87)
+        else:
+            replay_text_colour = (255, 255, 255)
+        if quit_button.collidepoint(mouse_x, mouse_y):
+            quit_text_colour = (136, 8 ,8)
+        else:
+            quit_text_colour = (255, 255, 255)
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1: 
                 mouse_x, mouse_y = pg.mouse.get_pos()

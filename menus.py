@@ -10,7 +10,9 @@ screen_height = screen_info.current_h #makes the pop-up screens height based on 
 font_size = screen_width // 25
 adelia = pg.font.Font('ADELIA.otf', font_size)
 text_colour = (255, 255, 255) #white, can change later
-
+play_text_colour = (255, 255, 255)
+settings_text_colour = (255, 255, 255)
+quit_text_colour = (255, 255, 255)
 
 screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #creates the display
 background_image = pg.image.load("game visuals/2102.i518.009_sky_cloud_evening_illustration.jpg")
@@ -44,26 +46,26 @@ def settings_text_and_slider(text, x_pos, y_pos):
     # Draw the slider track
     track = pg.Rect(screen_width // 2, screen_height // y_pos - text_height // 2 + screen_height // 36, slider_width, screen_height // 36)
     pg.draw.rect(screen, (255, 255, 255), track)
-    return
+    return track
 
 
 
 #want to make a function that takes current state as input and desplays the corresponding screen
 def main_menu(state):
-
+    global play_text_colour, settings_text_colour, quit_text_colour
     #Options on main menu page
     main_menu_text = "Bera and Tom's Epic Hangman!"
     main_menu_text = adelia.render(main_menu_text, True, text_colour)
     
     play_text = "Play"
-    play_text = adelia.render(play_text, True, text_colour)
+    play_text = adelia.render(play_text, True, play_text_colour)
     
     settings_text = "Settings"
-    settings_text = adelia.render(settings_text, True, text_colour)
+    settings_text = adelia.render(settings_text, True, settings_text_colour)
   
     
     quit_text = "Quit Game"
-    quit_text = adelia.render(quit_text, True, text_colour)
+    quit_text = adelia.render(quit_text, True, quit_text_colour)
 
     show_text_centred(main_menu_text, 2, 7)
     play_x, play_y = show_text_centred(play_text, 2, 7 / 3)
@@ -80,6 +82,19 @@ def main_menu(state):
     quit_button.topleft = (quit_x, quit_y)
 
     for event in pg.event.get():
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        if play_button.collidepoint(mouse_x, mouse_y):
+            play_text_colour = (46, 155,87)
+        else:
+            play_text_colour = (255, 255, 255)
+        if settings_button.collidepoint(mouse_x, mouse_y):
+            settings_text_colour = (46, 155,87)
+        else:
+            settings_text_colour = (255, 255, 255)
+        if quit_button.collidepoint(mouse_x, mouse_y):
+            quit_text_colour = (136, 8 ,8)
+        else:
+            quit_text_colour = (255, 255, 255)    
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
                 mouse_x, mouse_y = pg.mouse.get_pos()
@@ -112,9 +127,20 @@ def settings_menu():
     effects_vol_text = adelia.render(effects_vol_text, True, text_colour)
     effects_vol_dragging = False
     #Displaying settings menu text
-    settings_text_and_slider(master_vol_text, 20, 6 / 2)
-    settings_text_and_slider(music_vol_text, 20, 6 / 3)
-    settings_text_and_slider(effects_vol_text, 20, 6 / 4)
+    master_track = settings_text_and_slider(master_vol_text, 20, 6 / 2)
+    music_track = settings_text_and_slider(music_vol_text, 20, 6 / 3)
+    effects_track = settings_text_and_slider(effects_vol_text, 20, 6 / 4)
+
+    for event in pg.event.get():
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                mouse_x, mouse_y = pg.mouse.get_pos()
+                if slider_thumb.collidepoint(mouse_x, mouse_y):
+                    # If the user clicked on the thumb, enable dragging
+                    dragging = True
+        elif event.type == pg.MOUSEBUTTONUP:
+            if event.button == 1:
+                dragging = False
     
 
 
