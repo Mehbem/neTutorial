@@ -98,11 +98,11 @@ def play_game_state():
 
     #the white lines that are under each letter
     lines_x = screen_width//2 - len(random_word)*15
-    lines_y = screen_height-700
+    lines_y = screen_height//3
     line_width = screen_width//24
     line_spacing = screen_width//144
     horizontal_position = [lines_x + i * (line_width + line_spacing) for i in range(len(random_word))]
-    lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, line_width, 10) for i in range(len(random_word))]
+    lines_under_letters = [pg.Rect(horizontal_position[i], lines_y, line_width, screen_height//90) for i in range(len(random_word))]
 
     for line in lines_under_letters:
         pg.draw.rect(screen, (255, 255, 255), line)
@@ -164,7 +164,7 @@ def letter_typed():
     for character in location_letter:
         
         x_position = horizontal_position[character]
-        y_position = screen_height//4.3
+        y_position = screen_height//3 - screen_height//10
         letter_image = pg.image.load(os.path.join("letters", letter_file_name)).convert()
         letter_image_resized = pg.transform.scale(letter_image, (screen_width // 20, screen_height // 9))
         letter_image_resized.set_colorkey((0, 0, 0))
