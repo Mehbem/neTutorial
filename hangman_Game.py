@@ -45,13 +45,13 @@ starting_place = 0
 
 
 #the word bank of the game that a random word gets picked from
-wordbank = []
+wordbank = ["Ben"]
 #opens a file and reads through each of the lines in the list of words
-file = open('Animals.txt', 'r')
+"""file = open('Animals.txt', 'r')
 Lines = file.readlines() #reads through the lines of Animals.txt 
 for line in Lines:
     if len(line.split(" ")) ==1: #removes any animals name ifs its not one word 
-        wordbank.append(line.rstrip()) #adds that word to the wordbank and rstrip gets rid of invisible /n at the end of each word
+        wordbank.append(line.rstrip())""" #adds that word to the wordbank and rstrip gets rid of invisible /n at the end of each word
         
 #A list of guessed letters
 guessed_letters = []
@@ -122,9 +122,9 @@ def play_game_state():
     for line in lines_under_letters:
         pg.draw.rect(screen, (255, 255, 255), line)
         
-#this function draws a replay button and checks to see if the player is pressing it     
 replay_text_colour = (255, 255, 255)
 quit_text_colour = (255, 255, 255)
+#this function draws a replay button and checks to see if the player is pressing it     
 def draw_quit_replay_button():
     global run, replay_text_colour, quit_text_colour
     #defining all the variables and constraints of the text
@@ -190,20 +190,25 @@ def letter_typed():
     #defines a variable for the png of every letter efficently 
     letter_file_name = "letter_" + letter + ".png"
     horizontal_position = [lines_x + i*line_width + (i-1)*screen_width//144 for i in range(len(random_word))]
-    
+# Iterates through each position where the guessed letter appears in the word
     for character in location_letter:
         
+     # Determines the x and y positions for displaying the guessed letter image
         x_position = horizontal_position[character]
         y_position = screen_height//3 - screen_height//10
+    
+     # Loads the image of the guessed letter from the "letters" directory    
         letter_image = pg.image.load(os.path.join("letters", letter_file_name)).convert()
+      # Resizes the letter image to fit the specified screen proportional dimensions
         letter_image_resized = pg.transform.scale(letter_image, (screen_width // 20, screen_height // 9))
+     # since images are png they initally have black backgrounds which get set to transparent 
         letter_image_resized.set_colorkey((0, 0, 0))
         
         screen.blit(letter_image_resized, (x_position, y_position))
 
 def draw_body_part(incorrect_guesses):
     
-    
+     # Dictionary mapping incorrect guesses to body part positions 
     body_parts_positions = {
         1: (380, screen_height-575),   # Head
         2: (450, screen_height-465),   # Torso
@@ -212,36 +217,43 @@ def draw_body_part(incorrect_guesses):
         5: (454, screen_height-280),   # Left leg
         6: (380, screen_height-280)    # Right leg
     }
-    
+     # Checks if the number of incorrect guesses is within the valid range
     if incorrect_guesses < len(body_parts_positions):
+    # Retrieves the x and y coordinates for the current body part from the dictionary  
         x, y = body_parts_positions[incorrect_guesses]
+    # looks through the body_parts folder and using incorrect guesses (0-6), loads up a body part with that number
         body_parts = pg.image.load("Body_parts/part_" + str(incorrect_guesses) + ".png")
-        # Display the resized image on the screen
+    # Displays the body parts 
         screen.blit(body_parts, (x, y))
 
         
-
+#responsible for drawing a letter underneath the white lines when a wrong guess is made 
 def draw_wrong_letter(starting_place):
+    # Constructs the filename for the wrong letter imag
     letter_file_name = "letter_" + letter + ".png"
+    
+    #the y coordinate of each wrong letter is constant however they have to be positioned different on the x position through starting_place iteration
     wrong_y_position = screen_height - 600
     wrong_x_position = starting_place * 100 + 600
+    
+    # Loads the image of the wrong letter from the "letters" directory and converts it
     letter_image = pg.image.load(os.path.join("letters", letter_file_name)).convert()
+    
+    # Resizes the loaded image to fit the screen and maintains transparency of the backdrop of letters 
     letter_image_resized = pg.transform.scale(letter_image, (screen_width // 20, screen_height // 9))
     letter_image_resized.set_colorkey((0, 0, 0))
+    
+    
     screen.blit(letter_image_resized, (wrong_x_position, wrong_y_position))
 
-def play_music(filename):
-    pg.mixer.music.stop()
-    pg.mixer.music.load(filename)
-    pg.mixer.music.play(-1)
-    pg.mixer.music.set_volume(0.5)
-
+#the function that is called when the man is fully hung and the player has lost 
 def you_lose_screen():
     
+    # this unpauses the lose music and stops the background music that is originally playing 
     background_music.pause()
     lose_music.unpause()
     
-    
+
     font_size = screen_width//20
     adelia = pg.font.Font('ADELIA.otf', font_size)
     text_colour = (69, 69, 69)
@@ -252,21 +264,20 @@ def you_lose_screen():
     
     lose_screen_text = "You lost, the word was:" 
     lose_screen_text = adelia.render(lose_screen_text, True, text_colour)
+    
     what_the_word_was = str(random_word)
     what_the_word_was = adelia.render(what_the_word_was, True, text_colour)
     
+    # Displays the "You lost" text and the actual word centered on the screen using the menus module (acts as a screen blit while also defining positions at the same time)
     menus.show_text_centred(lose_screen_text,2,2.3)
     menus.show_text_centred(what_the_word_was,2,1.7)
     
-    if event.type == pg.KEYDOWN:
-            #if the person presses the escape key the game closes
-            if event.key == pg.K_ESCAPE:
-                sys.exit(0)
     
     
-
+#the function that is called when the player has guessed the word right 
 def you_win_screen():
     
+    # this unpauses the win music and stops the background music that is originally playing
     background_music.pause()
     win_music.unpause()
     
@@ -284,8 +295,9 @@ def you_win_screen():
     what_the_word_was = str(random_word)
     what_the_word_was = adelia.render(what_the_word_was, True, text_colour)
     
-    screen.blit(win_screen_text, (screen_width // 2 - screen_width*0.45,screen_height// 2 - 100))
-    screen.blit(what_the_word_was, ((screen_width // 2 - (len(random_word) // 2 * 40)),screen_height// 2 + 50) ) 
+    # Displays the "You win" text and the actual word centered on the screen using the menus module (acts as a screen blit while also defining positions at the same time)
+    menus.show_text_centred(win_screen_text,2,2.3)
+    menus.show_text_centred(what_the_word_was,2,1.7)
 
 
 # creating the background image and scaling the background image to fit any given screen
