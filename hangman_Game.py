@@ -43,14 +43,14 @@ starting_place = 0
 
 
 #the word bank of the game that a random word gets picked from
-wordbank = ['bera']
+wordbank = []
 #opens a file and reads through each of the lines in the list of words
-'''file = open('Animals.txt', 'r')
+file = open('Animals.txt', 'r')
 Lines = file.readlines() #reads through the lines of Animals.txt 
 for line in Lines:
     if len(line.split(" ")) ==1: #removes any animals name ifs its not one word 
         wordbank.append(line.rstrip()) #adds that word to the wordbank and rstrip gets rid of invisible /n at the end of each word
-'''        
+        
 #A list of guessed letters
 guessed_letters = []
 wrong_letters = []
@@ -337,11 +337,13 @@ state = 'main_menu'
 master_vol = 1
 music_vol = 1
 effects_vol = 1
+
 while run:
     #controls what the current display is and changes between them 
     while state == 'main_menu':
         state = menus.main_menu(state)
     if state == 'settings_menu':
+        #calculations used for changing volume based on the location of the volume thumb in the settings menu
         state, master_vol, music_vol, effects_vol = menus.settings_menu(state, master_vol, music_vol, effects_vol)
         background_music.set_volume(master_vol * music_vol)
         win_music.set_volume(master_vol * music_vol)
@@ -352,11 +354,13 @@ while run:
         run = False
     if state == 'play_game':
         play_game_state()
+        #defining letter_typed, draw_body_part, and draw_wrong_letter outside the function allows the variables and visuals to be saved after escaping and coming back
         for letter in guessed_letters:
             letter_typed()
         for i in range(incorrect_guesses):
             draw_body_part(i + 1)
             draw_wrong_letter(wrong_letters[i], i + 1)
+        
         for event in pg.event.get():
             #checks if a key is being pressed down on 
             if event.type == pg.KEYDOWN:
@@ -373,14 +377,15 @@ while run:
                     #makes sure that a letter only appears in a space if it's correct and the person hasn't already made 6 incorrect guesses
                     if letter in random_word and letter not in guessed_letters and incorrect_guesses < 6:  
                         letter_typed()
-                        number_of_correct_letters += len(linear_search(random_word, letter))
-                        correct_guess_sound.play()
+                        #When the count equals the length of the word, the game recognizes that the player has successfully guessed the entire word, triggering the win condition.
+                        number_of_correct_letters += len(linear_search(random_word, letter)) 
                     else:
                         if letter not in guessed_letters:
                             incorrect_guesses += 1  #causes a new body part to be formed everytime
                             wrong_guess_sound.play() 
-                            wrong_letters.append(letter)
+                            wrong_letters.append(letter) #adds the letter to the wrong_letters list which is iterated through to draw the wrong letters
                     guessed_letters.append(letter)  # Add the letter to the guessed_letters list
+                    
         #this checks if the player lost and if they did it calls the lose screen function 
         if incorrect_guesses == 6:
                 #the playing_state variable is used in checking if the game is still running so when the play loses or wins it prevents any key input
