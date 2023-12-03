@@ -3,7 +3,6 @@
 import pygame as pg 
 import os
 import random
-import sys
 import menus
 
 #initilalizing pygame (defined as pg above) and the mixer(sound)
