@@ -228,14 +228,24 @@ def draw_body_part(incorrect_guesses):
 
         
 #responsible for drawing a letter underneath the white lines when a wrong guess is made 
-def draw_wrong_letter(starting_place):
+def draw_wrong_letter(incorrect_guesses):
     # Constructs the filename for the wrong letter imag
     letter_file_name = "letter_" + letter + ".png"
-    
+   
     #the y coordinate of each wrong letter is constant however they have to be positioned different on the x position through starting_place iteration
-    wrong_y_position = screen_height - 600
-    wrong_x_position = starting_place * 100 + 600
-    
+    draw_wrong_letter_position = {
+        0: (0,0),
+        1: (700, screen_height-600),   # first wrong letter
+        2: (800, screen_height-600),   # second wrong letter
+        3: (900, screen_height-600),   # third wrong letter
+        4: (1000, screen_height-600),   # forth wrong letter
+        5: (1100, screen_height-600),   # fifth wrong letter
+        6: (1200, screen_height-600)    # sixth wrong letter
+    }
+    # Checks if the number of incorrect guesses is within the valid range
+    if incorrect_guesses < len(draw_wrong_letter_position):
+    # Retrieves the x and y coordinates for the current body part from the dictionary  
+        x, y = draw_wrong_letter_position[incorrect_guesses]
     # Loads the image of the wrong letter from the "letters" directory and converts it
     letter_image = pg.image.load(os.path.join("letters", letter_file_name)).convert()
     
@@ -244,7 +254,7 @@ def draw_wrong_letter(starting_place):
     letter_image_resized.set_colorkey((0, 0, 0))
     
     
-    screen.blit(letter_image_resized, (wrong_x_position, wrong_y_position))
+    screen.blit(letter_image_resized, (x, y))
 
 #the function that is called when the man is fully hung and the player has lost 
 def you_lose_screen():
