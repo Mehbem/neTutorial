@@ -60,7 +60,7 @@ random_word = random.choice(wordbank).lower()
 #resets all relevant variables back to their original forms in order to allow the player to play again
 def reset_game():
     #allows for variavles outside the function to be used in the function
-    global number_of_correct_letters, incorrect_guesses, starting_place, guessed_letters, random_word, playing_state, replay_text_colour
+    global number_of_correct_letters, incorrect_guesses, starting_place, guessed_letters, random_word, playing_state, replay_text_colour, wrong_letters
     
     #setting back all the variables to their original values
     playing_state = True
@@ -68,6 +68,7 @@ def reset_game():
     incorrect_guesses = 0
     starting_place = 0
     guessed_letters = []
+    wrong_letters = []
     replay_text_colour = (255, 255, 255)
     #rechooses a randomword
     random_word = random.choice(wordbank).lower()
@@ -182,7 +183,6 @@ def linear_search(arr, target):
 
 #this function uses the linear search previously defined and generates a letter on the screen even if it's wrong 
 def letter_typed():
-    
     
     location_letter = linear_search(random_word, letter)
     #the letter varialbe is defined later and basically takes the letter key input of the user and converts it to a string
