@@ -1,4 +1,5 @@
 #Created by Tom Verner and Bera Yavuz 
+#initals were not added as work was equally split between both people 
 #all modules used in the code
 import pygame as pg 
 import os
