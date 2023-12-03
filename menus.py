@@ -52,7 +52,7 @@ def settings_text_and_slider(text, x_pos, y_pos):
 
 def draw_thumb(track, pos):
     pos_y = track.y - track.height
-    pos_x = track.x + pos * track.width
+    pos_x = track.left + pos * track.width - track.height
 
     thumb = pg.Rect(pos_x, pos_y, track.height, 3 * track.height)
     pg.draw.rect(screen, (255, 255, 255), thumb)
@@ -126,21 +126,25 @@ def main_menu(state):
                     state = 'quit'
     pg.display.update()
     return state
-    
+master_vol_dragging = False  
+music_vol_dragging = False  
+effects_vol_dragging = False
 def settings_menu(state, master_vol, music_vol, effects_vol):
-
+    global master_vol_dragging, music_vol_dragging, effects_vol_dragging
+    screen.blit(background_image, (0,0))
+    screen.blit(grass_resized, (0,screen_height-200))
     #Options on settings menu page
     master_vol_text = "Master Volume: "
     master_vol_text = adelia.render(master_vol_text, True, text_colour)
-    master_vol_dragging = False
+    
 
     music_vol_text = "Music Volume: "
     music_vol_text = adelia.render(music_vol_text, True, text_colour)
-    music_vol_dragging = False
+    
 
     effects_vol_text = "Effects Volume: "
     effects_vol_text = adelia.render(effects_vol_text, True, text_colour)
-    effects_vol_dragging = False
+    
 
     #Displaying settings menu text
     master_track = settings_text_and_slider(master_vol_text, 20, 6 / 2)
@@ -170,13 +174,20 @@ def settings_menu(state, master_vol, music_vol, effects_vol):
                     # If the user clicked on the thumb, enable dragging
                     effects_vol_dragging = True
 
-        elif event.type == pg.MOUSEBUTTONUP:
+        if event.type == pg.MOUSEBUTTONUP:
             if event.button == 1:
                 master_vol_dragging = False
                 music_vol_dragging = False
                 effects_vol_dragging = False
     if master_vol_dragging:
         mouse_x, mouse_y = pg.mouse.get_pos()
+        master_vol = (max(master_track.left, min(master_track.right, mouse_x)) - master_track.left) / master_track.width
+    if music_vol_dragging:
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        music_vol = (max(music_track.left, min(music_track.right, mouse_x)) - music_track.left) / music_track.width
+    if effects_vol_dragging:
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        effects_vol = (max(effects_track.left, min(effects_track.right, mouse_x)) - effects_track.left) / effects_track.width
         
     return state, master_vol, music_vol, effects_vol
 
