@@ -16,7 +16,6 @@ win_music = pg.mixer.Channel(1)
 lose_music = pg.mixer.Channel(2)
 
 #starts playing all the soundtracks and sets the volume of the background music 
-background_music.set_volume(0.4)
 background_music.play(pg.mixer.Sound("Music and Sound/glorious_morning.mp3"), loops = -1, fade_ms=5000)
 win_music.play(pg.mixer.Sound("Music and Sound/Winning_Music.mp3"), loops = -1, fade_ms=5000)
 lose_music.play(pg.mixer.Sound("Music and Sound/Losing_Music.mp3"), loops = -1, fade_ms=5000)
@@ -28,9 +27,7 @@ lose_music.pause()
 
 #responsible for all the sound effects of the game
 correct_guess_sound = pg.mixer.Sound("Music and Sound/CorrectGuess.mp3")
-correct_guess_sound.set_volume(1.0)
 wrong_guess_sound = pg.mixer.Sound("Music and Sound/WrongGuess.mp3")
-wrong_guess_sound.set_volume(1.0)
 
 #info regarding the pop-up screen the player plays through
 screen_info = pg.display.Info() #takes the info of the users screen
@@ -321,13 +318,23 @@ characters_allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 playing_state = True
 #when true allows game to run, thus setting it to false helps to quick close the game
 run = True
+#setting ititial state to main menu
 state = 'main_menu'
+#setting initial volumes to max
+master_vol = 1
+music_vol = 1
+effects_vol = 1
 while run:
     #controls what the current display is and changes between them 
     while state == 'main_menu':
         state = menus.main_menu(state)
     if state == 'settings_menu':
-        menus.settings_menu()
+        state, master_vol, music_vol, effects_vol = menus.settings_menu(state, master_vol, music_vol, effects_vol)
+        background_music.set_volume(master_vol * music_vol)
+        win_music.set_volume(master_vol * music_vol)
+        lose_music.set_volume(master_vol * music_vol)
+        correct_guess_sound.set_volume(master_vol * effects_vol)
+        wrong_guess_sound.set_volume(master_vol * effects_vol)
     if state == 'quit':
         run = False
     if state == 'play_game':
@@ -337,7 +344,9 @@ while run:
             if event.type == pg.KEYDOWN:
                 #if the person presses the escape key the game closes
                 if event.key == pg.K_ESCAPE:
-                    run = False
+                    state = 'main_menu'
+                    screen.blit(background_image, (0,0))
+                    screen.blit(grass_resized, (0,screen_height-200))
                     #checks if the user is pressing down on a letter key and if that letter is in the set of allowed characters
                 elif event.unicode in characters_allowed and playing_state:
                     #converts whats pressed into a string letter equivalence and lowercases it 

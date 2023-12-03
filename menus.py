@@ -50,6 +50,13 @@ def settings_text_and_slider(text, x_pos, y_pos):
     pg.draw.rect(screen, (255, 255, 255), track)
     return track
 
+def draw_thumb(track, pos):
+    pos_y = track.y - track.height
+    pos_x = track.x + pos * track.width
+
+    thumb = pg.Rect(pos_x, pos_y, track.height, 3 * track.height)
+    pg.draw.rect(screen, (255, 255, 255), thumb)
+    return thumb
 
 
 #want to make a function that takes current state as input and desplays the corresponding screen
@@ -120,7 +127,7 @@ def main_menu(state):
     pg.display.update()
     return state
     
-def settings_menu():
+def settings_menu(state, master_vol, music_vol, effects_vol):
 
     #Options on settings menu page
     master_vol_text = "Master Volume: "
@@ -134,22 +141,44 @@ def settings_menu():
     effects_vol_text = "Effects Volume: "
     effects_vol_text = adelia.render(effects_vol_text, True, text_colour)
     effects_vol_dragging = False
+
     #Displaying settings menu text
     master_track = settings_text_and_slider(master_vol_text, 20, 6 / 2)
     music_track = settings_text_and_slider(music_vol_text, 20, 6 / 3)
     effects_track = settings_text_and_slider(effects_vol_text, 20, 6 / 4)
 
+    master_thumb = draw_thumb(master_track, master_vol)
+    music_thumb = draw_thumb(music_track, music_vol)
+    effects_thumb = draw_thumb(effects_track, effects_vol)
+
     for event in pg.event.get():
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_ESCAPE:
+                state = 'main_menu'
+                screen.blit(background_image, (0,0))
+                screen.blit(grass_resized, (0,screen_height-200))
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
                 mouse_x, mouse_y = pg.mouse.get_pos()
-                if slider_thumb.collidepoint(mouse_x, mouse_y):
+                if master_thumb.collidepoint(mouse_x, mouse_y):
                     # If the user clicked on the thumb, enable dragging
-                    dragging = True
+                    master_vol_dragging = True
+                if music_thumb.collidepoint(mouse_x, mouse_y):
+                    # If the user clicked on the thumb, enable dragging
+                    music_vol_dragging = True
+                if effects_thumb.collidepoint(mouse_x, mouse_y):
+                    # If the user clicked on the thumb, enable dragging
+                    effects_vol_dragging = True
+
         elif event.type == pg.MOUSEBUTTONUP:
             if event.button == 1:
-                dragging = False
-    
+                master_vol_dragging = False
+                music_vol_dragging = False
+                effects_vol_dragging = False
+    if master_vol_dragging:
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        
+    return state, master_vol, music_vol, effects_vol
 
 
 
