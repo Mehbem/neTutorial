@@ -43,16 +43,17 @@ starting_place = 0
 
 
 #the word bank of the game that a random word gets picked from
-wordbank = []
+wordbank = ['bera']
 #opens a file and reads through each of the lines in the list of words
-file = open('Animals.txt', 'r')
+'''file = open('Animals.txt', 'r')
 Lines = file.readlines() #reads through the lines of Animals.txt 
 for line in Lines:
     if len(line.split(" ")) ==1: #removes any animals name ifs its not one word 
         wordbank.append(line.rstrip()) #adds that word to the wordbank and rstrip gets rid of invisible /n at the end of each word
-        
+'''        
 #A list of guessed letters
 guessed_letters = []
+wrong_letters = []
 #picks a random word from the wordbank
 random_word = random.choice(wordbank).lower()
 
@@ -208,6 +209,7 @@ def draw_body_part(incorrect_guesses):
     
      # Dictionary mapping incorrect guesses to body part positions 
     body_parts_positions = {
+        0: (0,0),
         1: (380, screen_height-575),   # Head
         2: (450, screen_height-465),   # Torso
         3: (446, screen_height-440),   # Left arm
@@ -340,6 +342,10 @@ while run:
         run = False
     if state == 'play_game':
         play_game_state()
+        for letter in guessed_letters:
+            letter_typed()
+        for i in range(incorrect_guesses):
+            draw_body_part(i + 1)
         for event in pg.event.get():
             #checks if a key is being pressed down on 
             if event.type == pg.KEYDOWN:
@@ -361,8 +367,8 @@ while run:
                     else:
                         if letter not in guessed_letters:
                             incorrect_guesses += 1  #causes a new body part to be formed everytime
-                            draw_body_part(incorrect_guesses)
                             wrong_guess_sound.play() 
+                            draw_body_part(incorrect_guesses)
                             if incorrect_guesses < 6:
                                 draw_wrong_letter(starting_place)
                                 starting_place += 1 #this increment is used in calculating the spacing between each wrong letter generated in the bottom 
