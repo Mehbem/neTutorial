@@ -16,7 +16,7 @@ background_music = pg.mixer.Channel(0)
 win_music = pg.mixer.Channel(1)
 lose_music = pg.mixer.Channel(2)
 
-#starts playing all the soundtracks and sets the volume of the background music 
+#starts playing all the soundtracks at the same time 
 background_music.play(pg.mixer.Sound("Music and Sound/glorious_morning.mp3"), loops = -1, fade_ms=5000)
 win_music.play(pg.mixer.Sound("Music and Sound/Winning_Music.mp3"), loops = -1, fade_ms=5000)
 lose_music.play(pg.mixer.Sound("Music and Sound/Losing_Music.mp3"), loops = -1, fade_ms=5000)
