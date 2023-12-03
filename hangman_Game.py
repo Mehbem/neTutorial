@@ -228,7 +228,7 @@ def draw_body_part(incorrect_guesses):
 
         
 #responsible for drawing a letter underneath the white lines when a wrong guess is made 
-def draw_wrong_letter(incorrect_guesses):
+def draw_wrong_letter(letter, incorrect_guesses):
     # Constructs the filename for the wrong letter imag
     letter_file_name = "letter_" + letter + ".png"
    
@@ -356,6 +356,7 @@ while run:
             letter_typed()
         for i in range(incorrect_guesses):
             draw_body_part(i + 1)
+            draw_wrong_letter(wrong_letters[i], i + 1)
         for event in pg.event.get():
             #checks if a key is being pressed down on 
             if event.type == pg.KEYDOWN:
@@ -378,10 +379,7 @@ while run:
                         if letter not in guessed_letters:
                             incorrect_guesses += 1  #causes a new body part to be formed everytime
                             wrong_guess_sound.play() 
-                            draw_body_part(incorrect_guesses)
-                            if incorrect_guesses < 6:
-                                draw_wrong_letter(starting_place)
-                                starting_place += 1 #this increment is used in calculating the spacing between each wrong letter generated in the bottom 
+                            wrong_letters.append(letter)
                     guessed_letters.append(letter)  # Add the letter to the guessed_letters list
         #this checks if the player lost and if they did it calls the lose screen function 
         if incorrect_guesses == 6:
