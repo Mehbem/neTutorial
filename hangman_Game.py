@@ -1,3 +1,4 @@
+#Created by Tom Verner and Bera Yavuz 
 #all modules used in the code
 import pygame as pg 
 import os
@@ -42,13 +43,13 @@ starting_place = 0
 
 
 #the word bank of the game that a random word gets picked from
-wordbank = ["Ben"]
+wordbank = []
 #opens a file and reads through each of the lines in the list of words
-"""file = open('Animals.txt', 'r')
+file = open('Animals.txt', 'r')
 Lines = file.readlines() #reads through the lines of Animals.txt 
 for line in Lines:
     if len(line.split(" ")) ==1: #removes any animals name ifs its not one word 
-        wordbank.append(line.rstrip())""" #adds that word to the wordbank and rstrip gets rid of invisible /n at the end of each word
+        wordbank.append(line.rstrip()) #adds that word to the wordbank and rstrip gets rid of invisible /n at the end of each word
         
 #A list of guessed letters
 guessed_letters = []
