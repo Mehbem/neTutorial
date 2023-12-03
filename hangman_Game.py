@@ -377,6 +377,7 @@ while run:
                     #makes sure that a letter only appears in a space if it's correct and the person hasn't already made 6 incorrect guesses
                     if letter in random_word and letter not in guessed_letters and incorrect_guesses < 6:  
                         letter_typed()
+                        correct_guess_sound.play() 
                         #When the count equals the length of the word, the game recognizes that the player has successfully guessed the entire word, triggering the win condition.
                         number_of_correct_letters += len(linear_search(random_word, letter)) 
                     else:
