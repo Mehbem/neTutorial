@@ -20,7 +20,8 @@ screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #crea
 background_image = pg.image.load("game visuals/2102.i518.009_sky_cloud_evening_illustration.jpg")
 background_image = pg.transform.scale(background_image, (screen_width, screen_height))
 
-
+#sound effect for pressing things
+click_sound = pg.mixer.Sound("Music and Sound/Click_Sound.mp3")
 
 #defines the grass terrain below the gibbet and draws it
 grass_terrain = pg.image.load("game visuals/pngimg.com - grass_PNG401.png")
@@ -127,6 +128,7 @@ def main_menu(state):
             if event.button == 1:
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if play_button.collidepoint(mouse_x, mouse_y):
+                    click_sound.play()
                     screen.blit(background_image, (0,0))
                     screen.blit(grass_resized, (0,screen_height-200))
                     show_text_centred(pregame_text, 2, 2)
@@ -136,10 +138,13 @@ def main_menu(state):
                     screen.blit(grass_resized, (0,screen_height-200))
                     state = 'play_game'
                 if settings_button.collidepoint(mouse_x, mouse_y):
+                    click_sound.play()
                     state = 'settings_menu'
                     screen.blit(background_image, (0,0))
                     screen.blit(grass_resized, (0,screen_height-200))
                 if quit_button.collidepoint(mouse_x, mouse_y):
+                    click_sound.play()
+                    time.sleep(0.4)
                     state = 'quit'
     pg.display.update()
     return state

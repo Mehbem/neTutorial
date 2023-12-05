@@ -5,6 +5,7 @@ import pygame as pg
 import os
 import random
 import menus
+import time
 
 #initilalizing pygame (defined as pg above) and the mixer(sound)
 pg.init()
@@ -164,10 +165,12 @@ def draw_quit_replay_button():
             if event.button == 1: 
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if replay_button.collidepoint(mouse_x, mouse_y):
-                    reset_game()
                     click_sound.play()
+                    time.sleep(0.3)
+                    reset_game()
                 if quit_button.collidepoint(mouse_x, mouse_y):
                     click_sound.play()
+                    time.sleep(0.4)
                     run = False
         if event.type == pg.KEYDOWN:
             #if the person presses the escape key the game closes
