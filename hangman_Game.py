@@ -262,6 +262,7 @@ def you_lose_screen():
     # this unpauses the lose music and stops the background music that is originally playing 
     background_music.pause()
     lose_music.unpause()
+    lose_music.set_volume(master_vol * music_vol)
     
 
     font_size = screen_width//20
@@ -290,6 +291,7 @@ def you_win_screen():
     # this unpauses the win music and stops the background music that is originally playing
     background_music.pause()
     win_music.unpause()
+    win_music.set_volume(master_vol * music_vol)
     
     
     font_size = screen_width//30
@@ -346,8 +348,6 @@ while run:
         #calculations used for changing volume based on the location of the volume thumb in the settings menu
         state, master_vol, music_vol, effects_vol = menus.settings_menu(state, master_vol, music_vol, effects_vol)
         background_music.set_volume(master_vol * music_vol)
-        win_music.set_volume(master_vol * music_vol)
-        lose_music.set_volume(master_vol * music_vol)
         correct_guess_sound.set_volume(master_vol * effects_vol)
         wrong_guess_sound.set_volume(master_vol * effects_vol)
     if state == 'quit':
@@ -387,14 +387,14 @@ while run:
                             wrong_letters.append(letter) #adds the letter to the wrong_letters list which is iterated through to draw the wrong letters
                     guessed_letters.append(letter)  # Add the letter to the guessed_letters list
                     
-        #this checks if the player lost and if they did it calls the lose screen function 
+        #this checks if the player lost and if they did it calls the lose screen 
         if incorrect_guesses == 6:
                 #the playing_state variable is used in checking if the game is still running so when the play loses or wins it prevents any key input
                 playing_state = False
                 you_lose_screen()
                 draw_quit_replay_button()
             
-        #this checks if the player won and if they did it calls the win screen function  
+        #this checks if the player won and if they did it calls the win screen   
         if number_of_correct_letters == len(random_word):
                 playing_state = False
                 you_win_screen()
