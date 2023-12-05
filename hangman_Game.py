@@ -101,6 +101,14 @@ def play_game_state():
     pg.draw.rect(screen, (106, 59, 43), hanger_gibbet)
     rope_gibbet = pg.Rect((450, screen_height-650, 10, 80))
     pg.draw.rect(screen, (210, 175, 135), rope_gibbet)
+    
+    #clicking escape sends back text
+    font_size = screen_width//40
+    adelia = pg.font.Font('ADELIA.otf', font_size)
+    go_back_text_colour = (255, 255, 255)
+    go_back_text = "<- Esc"
+    go_back_text = adelia.render(go_back_text, True, go_back_text_colour)
+    screen.blit(go_back_text, (screen_width // 20, screen_height // 30))
 
 
     #the white lines that are under each letter

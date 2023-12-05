@@ -11,6 +11,7 @@ screen_height = screen_info.current_h #makes the pop-up screens height based on 
 font_size = screen_width // 25
 adelia = pg.font.Font('ADELIA.otf', font_size)
 adelia_2 = pg.font.Font('ADELIA.otf', screen_width // 15)
+adelia_3 = pg.font.Font('ADELIA.otf', screen_width // 40)
 text_colour = (255, 255, 255) #white, can change later
 play_text_colour = (255, 255, 255)
 settings_text_colour = (255, 255, 255)
@@ -173,6 +174,11 @@ def settings_menu(state, master_vol, music_vol, effects_vol):
     effects_vol_text = "Effects Volume: "
     effects_vol_text = adelia.render(effects_vol_text, True, text_colour)
     
+    #clicking escape sends back text
+    go_back_text_colour = (255, 255, 255)
+    go_back_text = "<- Esc"
+    go_back_text = adelia_3.render(go_back_text, True, go_back_text_colour)
+    screen.blit(go_back_text, (screen_width // 20, screen_height // 30))
 
     #Displaying settings menu text and storing the corresponding tracks
     master_track = settings_text_and_slider(master_vol_text, 20, 6 / 2)
