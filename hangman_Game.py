@@ -29,6 +29,7 @@ lose_music.pause()
 #responsible for all the sound effects of the game
 correct_guess_sound = pg.mixer.Sound("Music and Sound/CorrectGuess.mp3")
 wrong_guess_sound = pg.mixer.Sound("Music and Sound/WrongGuess.mp3")
+click_sound = pg.mixer.Sound("Music and Sound/Click_Sound.mp3")
 
 #info regarding the pop-up screen the player plays through
 screen_info = pg.display.Info() #takes the info of the users screen
@@ -164,7 +165,9 @@ def draw_quit_replay_button():
                 mouse_x, mouse_y = pg.mouse.get_pos()
                 if replay_button.collidepoint(mouse_x, mouse_y):
                     reset_game()
+                    click_sound.play()
                 if quit_button.collidepoint(mouse_x, mouse_y):
+                    click_sound.play()
                     run = False
         if event.type == pg.KEYDOWN:
             #if the person presses the escape key the game closes
@@ -352,6 +355,7 @@ while run:
         background_music.set_volume(master_vol * music_vol)
         correct_guess_sound.set_volume(master_vol * effects_vol)
         wrong_guess_sound.set_volume(master_vol * effects_vol)
+        click_sound.set_volume(master_vol * effects_vol)
     if state == 'quit':
         run = False
     if state == 'play_game':
