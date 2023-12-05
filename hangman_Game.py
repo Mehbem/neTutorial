@@ -50,23 +50,22 @@ Lines = file.readlines() #reads through the lines of Animals.txt
 for line in Lines:
     if len(line.split(" ")) ==1: #removes any animals name ifs its not one word 
         wordbank.append(line.rstrip()) #adds that word to the wordbank and rstrip gets rid of invisible /n at the end of each word
-        
+#picks a random word from the wordbank
+random_word = random.choice(wordbank).lower()
+       
 #A list of guessed letters
 guessed_letters = []
 wrong_letters = []
-#picks a random word from the wordbank
-random_word = random.choice(wordbank).lower()
 
 #resets all relevant variables back to their original forms in order to allow the player to play again
 def reset_game():
     #allows for variavles outside the function to be used in the function
-    global number_of_correct_letters, incorrect_guesses, starting_place, guessed_letters, random_word, playing_state, replay_text_colour, wrong_letters
+    global number_of_correct_letters, incorrect_guesses, guessed_letters, random_word, playing_state, replay_text_colour, wrong_letters
     
     #setting back all the variables to their original values
     playing_state = True
     number_of_correct_letters = 0
     incorrect_guesses = 0
-    starting_place = 0
     guessed_letters = []
     wrong_letters = []
     replay_text_colour = (255, 255, 255)
@@ -236,7 +235,7 @@ def draw_wrong_letter(letter, incorrect_guesses):
     # Constructs the filename for the wrong letter imag
     letter_file_name = "letter_" + letter + ".png"
    
-    #the y coordinate of each wrong letter is constant however they have to be positioned different on the x position through starting_place iteration
+    #the y coordinate of each wrong letter is constant however they have to be positioned different on the x position based on their dictionary value
     draw_wrong_letter_position = {
         0: (0,0),
         1: (700, screen_height-600),   # first wrong letter
