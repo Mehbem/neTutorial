@@ -262,6 +262,7 @@ def you_lose_screen():
     # this unpauses the lose music and stops the background music that is originally playing 
     background_music.pause()
     lose_music.unpause()
+    # used for calculating the volume of the music based on location of volume thumb
     lose_music.set_volume(master_vol * music_vol)
     
 
@@ -288,9 +289,10 @@ def you_lose_screen():
 #the function that is called when the player has guessed the word right 
 def you_win_screen():
     
-    # this unpauses the win music and stops the background music that is originally playing
+    # this unpauses the win music and stops the background music that is originally playing 
     background_music.pause()
     win_music.unpause()
+    # used for calculating the volume of the music based on location of volume thumb
     win_music.set_volume(master_vol * music_vol)
     
     

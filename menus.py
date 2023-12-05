@@ -86,7 +86,7 @@ def main_menu(state):
     quit_text = adelia.render(quit_text, True, quit_text_colour)
 
     pregame_text = "Guess the Animal!"
-    pregame_text = adelia_2.render(pregame_text, True, (247, 117, 143))
+    pregame_text = adelia_2.render(pregame_text, True, (255, 255, 255))
 
     #Drawing each menu option + title, getting positions of each option
     show_text_centred(main_menu_text, 2, 7)
