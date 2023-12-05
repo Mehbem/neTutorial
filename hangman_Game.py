@@ -41,8 +41,6 @@ screen = pg.display.set_mode((screen_width, screen_height), pg.FULLSCREEN) #crea
 #defined starting values for certain functions and uses these as the basis of the incrementation points
 number_of_correct_letters = 0 #change this to number of letters 
 incorrect_guesses = 0 
-starting_place = 0
-
 
 #the word bank of the game that a random word gets picked from
 wordbank = []
